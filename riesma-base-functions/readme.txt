@@ -1,11 +1,3 @@
-wordpress-base-functions
-========================
-
-Adding base functions and setting to WordPress, for creating custom post types, ordering and removing admin menu items etc.
-
-
-
-
 === Riesma Base Functions ===
 Contributors: Richard van Aalst
 Donate link: http://riesma.nl/
