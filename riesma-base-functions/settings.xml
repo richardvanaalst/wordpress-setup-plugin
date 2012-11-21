@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<settings version="1.0.0">
+
+
+	<translation_domain>
+		<default active="false" descr="WordPress default translations" />
+		<riesma active="false" descr="Riesma's translations" />
+		<bonestheme active="true" descr="Bones translations" />
+	</translation_domain>
+
+
+	<post_types>
+		<post_type name="products">
+			<labels>
+				<name descr="Name of the Custom Post Type group">Producten<name>
+				<singular_name descr="Name of individual Custom Post Type item">Product</singular_name>
+				<all_items descr="All Items menu item">Alle producten</all_items>
+				<add_new descr="Add New menu item">Nieuw product</add_new>
+				<add_new_item descr="Add New display title">Nieuw product toevoegen</add_new_item>
+				<edit descr="Edit dialog">Bewerken</edit>
+				<edit_item descr="Edit display title">Product bewerken</edit_item>
+				<new_item descr="New display title">Nieuw product</new_item>
+				<view_item descr="View display title">Product bekijken</view_item>
+				<search_items descr="Search Custom Post Type title">Producten zoeken</search_items>
+				<not_found descr="No Entries Yet dialog">Geen producten gevonden.</not_found>
+				<not_found_in_trash descr="Nothing in the Trash dialog">Geen producten gevonden in de prullenbak.</not_found_in_trash>
+				<parent_item_colon descr="?"></parent_item_colon>
+			</labels>
+			<description descr="Custom Post Type Description">Products post type</description>
+			<public descr="?">true</public>
+			<publicly_queryable descr="?">true</publicly_queryable>
+			<exclude_from_search descr="?">false</exclude_from_search>
+			<show_ui descr="Show in the admin panel">true</show_ui>
+			<query_var descr="Allow vars to be used for querying post-type">true</query_var>
+<!-- check	<menu_icon descr="Icon of menu item">get_stylesheet_directory_uri().'/library/img/products-icon>png'</menu_icon>-->
+			<rewrite descr="Rename the URL slug">
+				<slug>creation</slug>
+				<with_front>false</with_front>
+			</rewrite>
+			<has_archive descr="Rename the archive URL slug">creations</has_archive>
+			<capability_type descr="?">post</capability_type>
+			<hierarchical descr="?">false</hierarchical>
+			<supports descr="Enable options in the post editor">
+				<option>title</option>
+				<option>editor</option>
+				<option>author</option>
+				<option>thumbnail</option>
+				<option>excerpt</option>
+				<option>trackbacks</option>
+				<option>custom</option-fields>
+				<option>comments</option>
+				<option>revisions</option>
+				<option>sticky</option>
+			</supports>
+		</post_type>
+
+	</post_types>
+
+
+	<admin_menu_order_items>
+		<item>index.php</item>
+			<item>separator1</item>
+		<item>edit.php?post_type=page</item>
+		<item>edit.php</item>
+		<item>edit.php?post_type=products</item>
+		<item>edit.php?post_type=news</item>
+			<item>separator2</item>
+		<item>edit-comments.php</item>
+		<item>upload.php</item>
+		<item>link-manager.php</item>
+			<item>separator-last</item>
+		<item>themes.php</item>
+		<item>plugins.php</item>
+		<item>users.php</item>
+		<item>tools.php</item>
+		<item>options-general.php</item>
+	</admin_menu_order_items>
+
+
+	<admin_menu_remove_items>
+		<admin>
+			<!--<item>edit.php?post_type=page</item><!-- -->
+			<item>edit.php</item><!-- -->
+			<item>edit-comments.php</item><!-- -->
+			<!--<item>upload.php</item><!-- -->
+			<item>link-manager.php</item><!-- -->
+			<!--<item>themes.php</item><!-- -->
+			<!--<item>plugins.php</item><!-- -->
+			<!--<item>users.php</item><!-- -->
+			<!--<item>tools.php</item><!-- -->
+			<!--<item>options-general.php</item><!-- -->
+		</admin>
+
+		<user>
+			<!--<item>edit.php?post_type=page</item><!-- -->
+			<item>edit.php</item><!-- -->
+			<item>edit-comments.php</item><!-- -->
+			<!--<item>upload.php</item><!-- -->
+			<item>link-manager.php</item><!-- -->
+			<!--<item>profile.php</item><!-- -->
+			<item>tools.php</item><!-- -->
+		</user>
+	</admin_menu_remove_items>
+
+
+</settings>
