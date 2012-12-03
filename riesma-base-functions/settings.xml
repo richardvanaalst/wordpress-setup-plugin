@@ -4,13 +4,16 @@
 
 
 	<translation_domain>
-		<default active="false" descr="WordPress default translations" />
-		<riesma active="false" descr="Riesma's translations" />
-		<bonestheme active="true" descr="Bones translations" />
+		<active>bonestheme</active>
+		<default descr="WordPress default translations" />
+		<riesma descr="Riesma's translations" />
+		<bonestheme descr="Bones translations" />
 	</translation_domain>
 
 
 	<post_types>
+
+		<!-- Post type 'products' -->
 		<post_type name="products">
 			<labels>
 				<name descr="Name of the Custom Post Type group">Producten<name>
@@ -33,7 +36,9 @@
 			<exclude_from_search descr="?">false</exclude_from_search>
 			<show_ui descr="Show in the admin panel">true</show_ui>
 			<query_var descr="Allow vars to be used for querying post-type">true</query_var>
-<!-- check	<menu_icon descr="Icon of menu item">get_stylesheet_directory_uri().'/library/img/products-icon>png'</menu_icon>-->
+<!-- check voor uri
+			<menu_icon descr="Icon of menu item">get_stylesheet_directory_uri().'/library/img/products-icon>png'</menu_icon>
+-->
 			<rewrite descr="Rename the URL slug">
 				<slug>creation</slug>
 				<with_front>false</with_front>
@@ -58,13 +63,75 @@
 	</post_types>
 
 
+	<taxonomies>
+
+		<!-- Category -->
+		<taxonomy name="products_category">
+			<post_types>
+				<post_type>products</post_type>
+			</post_types>
+
+			<label descr="Name of the Custom Taxonomy">Categorieën</label>
+			<labels descr="Name of the Custom Taxonomy">
+				<name descr="Name of the Custom Taxonomy group">Categorieën</name>
+				<singular_name descr="Name of individual Custom Taxonomy item">Categorie</singular_name>
+				<add_new_item descr="Add New Custom Taxonomy title and button">Nieuwe categorie toevoegen</add_new_item>
+				<edit_item descr="Edit Custom Taxonomy page title">Categorie bewerken</edit_item>
+				<update_item descr="Update Custom Taxonomy button in Quick Edit">Categorie bijwerken</update_item>
+				<search_items descr="Search Custom Taxonomy button">Categorieën zoeken</search_items>
+				<all_items descr="All Custom Taxonomy title in taxonomy's panel tab">Alle categorieën</all_items>
+				<new_item_name descr="New Custom Taxonomy title in taxonomy's panel tab">Nieuwe categorie naam</new_item_name>
+				<parent_item descr="Custom Taxonomy Parent in taxonomy's panel select box">Categorie hoofd</parent_item>
+				<parent_item_colon descr="Custom Taxonomy Parent title with colon">Categorie hoofd:</parent_item_colon>
+			</labels>
+			<hierarchical descr="Hierachy: true = categories, false = tags">true</hierarchical>
+			<public descr="Available in admin panel">true</public>
+			<show_ui descr="Show in the admin panel">true</show_ui>
+			<show_in_nav_menus descr="Show in the menus admin panel">true</show_in_nav_menus>
+			<query_var descr="Allow vars to be used for querying taxonomy">true</query_var>
+			<rewrite descr="Rename the URL slug">
+				<slug>product-categories</slug>
+				<with_front>true</with_front>
+			</rewrite>
+		</taxonomy>
+
+		<!-- Tag -->
+		<taxonomy name="products_tag">
+			<post_types>
+				<post_type>products</post_type>
+			</post_types>
+
+			<label descr="Name of the Custom Taxonomy">Tags</label>
+			<labels descr="Name of the Custom Taxonomy">
+				<name descr="Name of the Custom Taxonomy group">Tags</name>
+				<singular_name descr="Name of individual Custom Taxonomy item">Tag</singular_name>
+				<add_new_item descr="Add New Custom Taxonomy title and button">Nieuwe tag toevoegen</add_new_item>
+				<edit_item descr="Edit Custom Taxonomy page title">Tag bewerken</edit_item>
+				<update_item descr="Update Custom Taxonomy button in Quick Edit">Tag bijwerken</update_item>
+				<search_items descr="Search Custom Taxonomy button">Tags zoeken</search_items>
+				<all_items descr="All Custom Taxonomy title in taxonomy's panel tab">Alle tags</all_items>
+				<new_item_name descr="New Custom Taxonomy title in taxonomy's panel tab">Nieuwe tag naam</new_item_name>
+			</labels>
+			<hierarchical descr="Hierachy: true = categories, false = tags">false</hierarchical>
+			<public descr="Available in admin panel">true</public>
+			<show_ui descr="Show in the admin panel">true</show_ui>
+			<show_in_nav_menus descr="Show in the menus admin panel">true</show_in_nav_menus>
+			<query_var descr="Allow vars to be used for querying taxonomy">true</query_var>
+			<rewrite descr="Rename the URL slug">
+				<slug>product-tags</slug>
+				<with_front>true</with_front>
+			</rewrite>
+		</taxonomy>
+
+	</taxonomies>
+
+
 	<admin_menu_order_items>
 		<item>index.php</item>
 			<item>separator1</item>
 		<item>edit.php?post_type=page</item>
-		<item>edit.php</item>
 		<item>edit.php?post_type=products</item>
-		<item>edit.php?post_type=news</item>
+		<item>edit.php</item>
 			<item>separator2</item>
 		<item>edit-comments.php</item>
 		<item>upload.php</item>
@@ -73,6 +140,7 @@
 		<item>themes.php</item>
 		<item>plugins.php</item>
 		<item>users.php</item>
+		<item>profile.php</item>
 		<item>tools.php</item>
 		<item>options-general.php</item>
 	</admin_menu_order_items>
@@ -80,26 +148,26 @@
 
 	<admin_menu_remove_items>
 		<admin>
-			<!--<item>edit.php?post_type=page</item><!-- -->
-			<item>edit.php</item><!-- -->
-			<item>edit-comments.php</item><!-- -->
-			<!--<item>upload.php</item><!-- -->
-			<item>link-manager.php</item><!-- -->
-			<!--<item>themes.php</item><!-- -->
-			<!--<item>plugins.php</item><!-- -->
-			<!--<item>users.php</item><!-- -->
-			<!--<item>tools.php</item><!-- -->
-			<!--<item>options-general.php</item><!-- -->
+			<!-- <item>edit.php?post_type=page</item>-->
+			<item>edit.php</item>
+			<item>edit-comments.php</item>
+			<!--<item>upload.php</item>-->
+			<item>link-manager.php</item>
+			<!--<item>themes.php</item>-->
+			<!--<item>plugins.php</item>-->
+			<!--<item>users.php</item>-->
+			<!--<item>tools.php</item>-->
+			<!--<item>options-general.php</item>-->
 		</admin>
 
 		<user>
-			<!--<item>edit.php?post_type=page</item><!-- -->
-			<item>edit.php</item><!-- -->
-			<item>edit-comments.php</item><!-- -->
-			<!--<item>upload.php</item><!-- -->
-			<item>link-manager.php</item><!-- -->
-			<!--<item>profile.php</item><!-- -->
-			<item>tools.php</item><!-- -->
+			<!--<item>edit.php?post_type=page</item>-->
+			<item>edit.php</item>
+			<item>edit-comments.php</item>
+			<!--<item>upload.php</item>-->
+			<item>link-manager.php</item>
+			<!--<item>profile.php</item>-->
+			<item>tools.php</item>
 		</user>
 	</admin_menu_remove_items>
 
