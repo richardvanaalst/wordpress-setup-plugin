@@ -64,7 +64,7 @@ class Riesma_Functions {
 	function __construct() {
 
 		// Add post type 'Products'
-		add_action('init', array($this, 'riesma_add_posttype_products'));
+		add_action('init', array(&$this, 'riesma_add_posttype_products'));
 
 		// Order admin menu items
 		add_filter('custom_menu_order', create_function('', 'return true;'));
@@ -81,6 +81,7 @@ class Riesma_Functions {
 	*/
 	public function riesma_add_posttype_products() {
 
+		global $translation_domain;
 		$domain = $translation_domain;
 
 		// Add custom post type
@@ -278,9 +279,11 @@ class Riesma_Functions {
 			'themes.php',
 			'plugins.php',
 			'users.php',
+			'profile.php',
 			'tools.php',
 			'options-general.php'
 		);
+
 		array_splice($menu, 1, 0, $ordered_menu);
 		return array_unique($menu);
 	} // riesma_order_admin_menu_items
@@ -296,7 +299,7 @@ class Riesma_Functions {
 		if (is_admin()) {
 			//remove_menu_page('edit.php?post_type=page');
 			//remove_menu_page('edit.php');
-		//	//remove_menu_page('edit.php?post_type=custom');
+		//	remove_menu_page('edit.php?post_type=custom');
 			//remove_menu_page('edit-comments.php');
 			//remove_menu_page('upload.php');
 			//remove_menu_page('link-manager.php');
@@ -312,7 +315,7 @@ class Riesma_Functions {
 			//remove_menu_page('edit.php?post_type=page');
 			//remove_menu_page('edit.php');
 			//remove_menu_page('edit-comments.php');
-		//	//remove_menu_page('edit.php?post_type=custom');
+		//	remove_menu_page('edit.php?post_type=custom');
 			//remove_menu_page('upload.php');
 			//remove_menu_page('link-manager.php');
 			//remove_menu_page('profile.php');
@@ -320,12 +323,11 @@ class Riesma_Functions {
 		}
 	} // riesma_remove_admin_menu_items
 
-} // riesma_Functions
+} // Riesma_Functions
 
-
-
-//global $riesma_fucntions;
-$riesma_functions = new Riesma_Functions();
+// Instantiate the class
+//global $Riesma_Functions;
+$Riesma_Functions = new Riesma_Functions();
 
 
 
