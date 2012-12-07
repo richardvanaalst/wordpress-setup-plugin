@@ -2,22 +2,18 @@
 /*
 Plugin Name: Riesma base functions
 	Version: 1.0.0
-	Plugin URI:
+	Plugin URI: http://riesma.nl/
 	Description: Adding Riesma's base functions.
 
 Author: Richard van Aalst
 	Author URI: http://riesma.nl/
 	License: GPL v3
 
-Based on Bones Custom Post Type Example
-	Developed by: Eddie Machado
-	URL: http://themble.com/bones/
-
-Copyright (c) 2012 i-Aspect: info@riesma.nl
-
-	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License, version 2, as
-	published by the Free Software Foundation.
+Copyright (C) 2012 Richard van Aalst
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
 
 	This program is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -25,21 +21,20 @@ Copyright (c) 2012 i-Aspect: info@riesma.nl
 	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Usage
-	Edit this file for setting the post types, admin menu etc.
+	Edit this php file for setting the post types, admin menu etc.
 
-	This plugin is using the Bones theme (see above) translations,
+	This plugin uses the Bones theme <http://themble.com/bones/> translations,
 	therefore it's recommended to use that as your base theme.
 	Even without this plugin it is!
 
 TODO
-	1a.	Create xml to edit settings instead of editing php files
-	1b.	Create admin pages to edit settings instead of editing php/xml files
-	2.	Write own translation? Falling back to Bones for now.
-	3.	More...? Of course there is!
+		1a.	Create xml to edit settings instead of editing this php file?
+	X	1b.	Create admin pages to edit settings instead of editing php/xml files
+		2.	Write own translation? Falling back to Bones for now.
+		3.	More...? Of course there is!
 
 More information
 	register_post_type	http://codex.wordpress.org/Function_Reference/register_post_type
@@ -54,9 +49,10 @@ class Riesma_Functions {
 	/**
 	 * Set domain for translations.
 	*/
-	//private $translation_domain = 'default';		// WordPress default translations
-	//private $translation_domain = 'riesma';		// Riesma translations
-	private $translation_domain = 'bonestheme';		// Bones translations
+	// WordPress default translations
+	private $translation_domain = 'default';
+	// Riesma translations
+	//private $translation_domain = 'riesma';
 
 	/**
 	 * Class constructor
@@ -77,14 +73,17 @@ class Riesma_Functions {
 
 
 	/**
-	 * Add post type 'Products'
+	 * Add post type 'Products' including taxonomies
 	*/
 	public function riesma_add_posttype_products() {
 
 		global $translation_domain;
 		$domain = $translation_domain;
 
-		// Add custom post type
+		/**
+		 * Add custom post type
+		*/
+		// Identifier of the Custom Type
 		register_post_type('products',
 			array(
 				'labels' => array(
@@ -113,7 +112,7 @@ class Riesma_Functions {
 					// Nothing in the Trash dialog
 					'not_found_in_trash' => __('Geen producten gevonden in de prullenbak.', $domain),
 					// ?
-					'parent_item_colon'  => ''
+					'parent_item_colon'  => __('', $domain)
 				),
 				// Custom Type Description
 				'description'         => __('Products post type.', $domain),
@@ -137,35 +136,28 @@ class Riesma_Functions {
 				'capability_type'     => 'post',
 				// ?
 				'hierarchical'        => false,
-				// Enable options in the post editor
-				'supports'            => array(
-											'title',
-											'editor',
-											'author',
-											'thumbnail',
-											'excerpt',
-											'trackbacks',
-											'custom-fields',
-											'comments',
-											'revisions',
-											'sticky'
-										)
+				// Enable all options in the post editor
+				'supports'            => array('title', 'editor', 'author', 'thumbnail', 'excerpt', 'trackbacks', 'custom-fields', 'comments', 'revisions', 'sticky')
 			)
 		);
 
 
-		// Add custom taxonomy as categories
+		/**
+		 * Add custom taxonomy as categories
+		 *
+		 * When using the name 'Categories' (en_US) or 'Categorieën' (nl_NL), only use 'label'.
+		 * (For en_US and nl_NL (with Dutch language installed),
+		 *  WordPress automatically provides translated labels)
+		 * When using a custom name, (e.g. 'Locations'), use 'labels'.
+		*/
 		register_taxonomy('products_category',
 			// Change to the name of register_post_type
 			array('products'),
 			array(
-				/* When using name 'Categories' (en_US) or 'Categorieën' (nl_NL),
-				 * WordPress provides all translated labels: only use 'label'.
-				 * When using another name, (e.g. 'Locations'): use 'labels'.
-				*/
 				// Name of the Custom Taxonomy
 				'label' => __('Categorieën', $domain),
 				/*
+				// Extended options
 				'labels' => array(
 					// Name of the Custom Taxonomy group
 					'name'              => __('Categorieën', $domain),
@@ -205,15 +197,19 @@ class Riesma_Functions {
 		);
 
 
-		// Add custom taxonomy as tags
+		/**
+		 * Add custom taxonomy as tags
+		 *
+		 * When using the name 'Tags', only use 'label'.
+		 * (For en_US and nl_NL (with Dutch language installed),
+		 *  WordPress automatically provides translated labels)
+		 * When using a custom name, (e.g. 'Locations'), use 'labels'.
+		*/
+		*/
 		register_taxonomy('products_tag',
 			// Change to the name of register_post_type
 			array('products'),
 			array(
-				/* When using name 'Tags' (en_US and nl_NL),
-				 * WordPress provides all translated labels: only use 'label'.
-				 * When using another name, (e.g. 'Locations'): use 'labels'.
-				*/
 				// Name of the Custom Taxonomy
 				'label' => __('Tags', $domain),
 				/*
@@ -252,9 +248,12 @@ class Riesma_Functions {
 		);
 
 
-		// Add WordPress' default post categories to custom post type
+		/**
+		 * Add WordPress' default taxonomies to custom post type
+		*/
+		// Categories
 		//register_taxonomy_for_object_type('category', 'products');
-		// Add WordPress' default post tags to custom post type
+		// Tags
 		//register_taxonomy_for_object_type('post_tag', 'products');
 
 	} // riesma_add_posttype_products
