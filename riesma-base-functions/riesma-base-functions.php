@@ -306,7 +306,7 @@ class Riesma_Functions {
 	public function riesma_remove_admin_menu_items() {
 
 		/* When logged in as admin. */
-		if (is_admin()) {
+		if (current_user_can('administrator')) {
 			//remove_menu_page('edit.php?post_type=page');
 			//remove_menu_page('edit.php');
 		//	remove_menu_page('edit.php?post_type=custom');
