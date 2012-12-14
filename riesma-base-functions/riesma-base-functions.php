@@ -57,17 +57,17 @@ class Riesma_Functions {
 	/**
 	 * Class constructor
 	*/
-	function __construct() {
+	public function __construct() {
 
 		// Add post type 'Products'
 		add_action('init', array(&$this, 'riesma_add_posttype_products'));
 
 		// Order admin menu items
 		add_filter('custom_menu_order', create_function('', 'return true;'));
-		add_filter('menu_order', 'riesma_order_admin_menu_items');
+		add_filter('menu_order', array(&$this, 'riesma_order_admin_menu_items'));
 
 		// Remove admin menu items
-		add_action('admin_menu', 'riesma_remove_admin_menu_items');
+		add_action('admin_menu', array(&$this, 'riesma_remove_admin_menu_items'));
 	}
 
 
