@@ -1,46 +1,49 @@
 <?php
-/*
-Plugin Name: Riesma base functions
-	Version: 1.0.1
-	Plugin URI: http://riesma.nl/
-	Description: Adding Riesma's base functions.
 
-Author: Richard van Aalst
-	Author URI: http://riesma.nl/
-	License: GPL v3
+/*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***\
 
-Copyright (C) 2012 Richard van Aalst
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
+Plugin Name:   Riesma base functions
+Plugin URI:    http://riesma.nl/
+Description:   Adding custom post types, sorting and hiding admin menu items.
+Version:       1.0.1
+Author:        Richard van Aalst
+Author URI:    http://riesma.nl/
+License:       GPL v3
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+Copyright (C) 2012-2014 Richard van Aalst
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-	You should have received a copy of the GNU General Public License
-	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http://www.gnu.org/licenses/>.
+
+*** *** *** *** *** *** *** *** ***
 
 Usage
-	Edit this php file for setting the post types, admin menu etc.
+Edit this php file for adding custom post types, sorting the admin menu etc.
+This plugin uses default translations.
 
-	This plugin uses the Bones theme <http://themble.com/bones/> translations,
-	therefore it's recommended to use that as your base theme.
-	Even without this plugin it is!
+Todo
+1.   Create easier way to edit the settings instead of editing this php file?
+  a.   Via XML, or
+  b.   Admin pages
+2.   Write own translation? Falling back to default for now.
 
-TODO
-		1a.	Create xml to edit settings instead of editing this php file?
-	X	1b.	Create admin pages to edit settings instead of editing php/xml files
-		2.	Write own translation? Falling back to Bones for now.
-		3.	More...? Of course there is!
+*** *** *** *** *** *** *** *** ***
 
 More information
-	register_post_type	http://codex.wordpress.org/Function_Reference/register_post_type
-	register_taxonomy	http://codex.wordpress.org/Function_Reference/register_taxonomy
-	custom meta boxes	https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress
-*/
+register_post_type   http://codex.wordpress.org/Function_Reference/register_post_type
+register_taxonomy    http://codex.wordpress.org/Function_Reference/register_taxonomy
+custom meta boxes    https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress
+
+\*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***/
 
 
 
@@ -54,13 +57,15 @@ class Riesma_Functions {
 	// Riesma translations
 	//private $translation_domain = 'riesma';
 
+
+
 	/**
 	 * Class constructor
 	*/
 	public function __construct() {
 
-		// Add post type 'Products'
-		add_action('init', array(&$this, 'riesma_add_posttype_items'));
+		// Add post type 'Items'
+		add_action('init', array(&$this, 'riesma_add_cpt_items'));
 
 		// Order admin menu items
 		add_filter('custom_menu_order', create_function('', 'return true;'));
@@ -73,12 +78,13 @@ class Riesma_Functions {
 
 
 	/**
-	 * Add post type 'Products' including taxonomies
+	 * Add custom post type 'Items' including taxonomies
 	*/
-	public function riesma_add_custom_posttype_items() {
+	public function riesma_add_cpt_items() {
 
 		global $translation_domain;
 		$domain = $translation_domain;
+
 
 
 		/**
@@ -146,6 +152,7 @@ class Riesma_Functions {
 		);
 
 
+
 		/**
 		 * Add custom taxonomy as categories
 		 *
@@ -205,6 +212,7 @@ class Riesma_Functions {
 		);
 
 
+
 		/**
 		 * Add custom taxonomy as tags
 		 *
@@ -257,6 +265,7 @@ class Riesma_Functions {
 				'rewrite'           => array('slug' => str_replace('_', '-', $tag_name), 'with_front' => true)
 			)
 		);
+
 
 
 		/**
@@ -334,6 +343,8 @@ class Riesma_Functions {
 	}
 
 }
+
+
 
 // Instantiate the class
 $Riesma_Functions = new Riesma_Functions();
