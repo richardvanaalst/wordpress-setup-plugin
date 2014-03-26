@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Riesma base functions
-	Version: 1.0.0
+	Version: 1.0.1
 	Plugin URI: http://riesma.nl/
 	Description: Adding Riesma's base functions.
 
