@@ -60,7 +60,7 @@ class Riesma_Functions {
 	public function __construct() {
 
 		// Add post type 'Products'
-		add_action('init', array(&$this, 'riesma_add_posttype_products'));
+		add_action('init', array(&$this, 'riesma_add_posttype_items'));
 
 		// Order admin menu items
 		add_filter('custom_menu_order', create_function('', 'return true;'));
@@ -75,7 +75,7 @@ class Riesma_Functions {
 	/**
 	 * Add post type 'Products' including taxonomies
 	*/
-	public function riesma_add_posttype_products() {
+	public function riesma_add_custom_posttype_items() {
 
 		global $translation_domain;
 		$domain = $translation_domain;
@@ -84,42 +84,42 @@ class Riesma_Functions {
 		/**
 		 * Add custom post type
 		*/
-		$pt_name          = 'products';
-		$pt_name_plural   = 'Producten';
-		$pt_name_singular = 'Product';
+		$cpt_name          = 'items';
+		$cpt_name_plural   = 'Items';
+		$cpt_name_singular = 'Item';
 
-		register_post_type($pt_name,
+		register_post_type($cpt_name,
 			array(
 				'labels' => array(
 					// Name of the Custom Type group
-					'name'               => __($pt_name_plural, $domain),
+					'name'               => __($cpt_name_plural, $domain),
 					// Name of individual Custom Type item
-					'singular_name'      => __($pt_name_singular, $domain),
+					'singular_name'      => __($cpt_name_singular, $domain),
 					// All Items menu item
-					'all_items'          => __('Alle ' . strtolower($pt_name_plural), $domain),
+					'all_items'          => __('Alle ' . strtolower($cpt_name_plural), $domain),
 					// Add New menu item
-					'add_new'            => __('Nieuw ' . strtolower($pt_name_singular), $domain),
+					'add_new'            => __('Nieuw ' . strtolower($cpt_name_singular), $domain),
 					// Add New display title
-					'add_new_item'       => __('Nieuw ' . strtolower($pt_name_singular) . ' toevoegen', $domain),
+					'add_new_item'       => __('Nieuw ' . strtolower($cpt_name_singular) . ' toevoegen', $domain),
 					// Edit dialog
 					'edit'               => __('Bewerken', $domain),
 					// Edit display title
-					'edit_item'          => __($pt_name_singular . ' bewerken', $domain),
+					'edit_item'          => __($cpt_name_singular . ' bewerken', $domain),
 					// New display title
-					'new_item'           => __('Nieuw ' . strtolower($pt_name_singular), $domain),
+					'new_item'           => __('Nieuw ' . strtolower($cpt_name_singular), $domain),
 					// View display title
-					'view_item'          => __($pt_name_singular . ' bekijken', $domain),
+					'view_item'          => __($cpt_name_singular . ' bekijken', $domain),
 					// Search Custom Type title
-					'search_items'       => __($pt_name_plural . ' zoeken', $domain),
+					'search_items'       => __($cpt_name_plural . ' zoeken', $domain),
 					// No Entries Yet dialog
-					'not_found'          => __('Geen ' . strtolower($pt_name_plural) . ' gevonden.', $domain),
+					'not_found'          => __('Geen ' . strtolower($cpt_name_plural) . ' gevonden.', $domain),
 					// Nothing in the Trash dialog
-					'not_found_in_trash' => __('Geen ' . strtolower($pt_name_plural) . ' gevonden in de prullenbak.', $domain),
+					'not_found_in_trash' => __('Geen ' . strtolower($cpt_name_plural) . ' gevonden in de prullenbak.', $domain),
 					// ?
 					'parent_item_colon'  => __('', $domain)
 				),
 				// Custom Type Description
-				'description'         => __($pt_name . ' post type.', $domain),
+				'description'         => __($cpt_name . ' post type.', $domain),
 				// Show in the admin panel
 				'public'              => true,
 				// ?
@@ -133,9 +133,9 @@ class Riesma_Functions {
 				// Icon of menu item
 				'menu_icon'           => get_stylesheet_directory_uri().'/library/img/products-icon.png',
 				// Rename the URL slug
-				'rewrite'             => array('slug' => str_replace('_', '-', $pt_name), 'with_front' => false),
+				'rewrite'             => array('slug' => str_replace('_', '-', $cpt_name), 'with_front' => false),
 				// Rename the archive URL slug
-				'has_archive'         => $pt_name,
+				'has_archive'         => $cpt_name,
 				// ?
 				'capability_type'     => 'post',
 				// ?
@@ -154,13 +154,13 @@ class Riesma_Functions {
 		 *  WordPress automatically provides translated labels)
 		 * When using a custom name, (e.g. 'Locations'), use 'labels'.
 		*/
-		$cat_name          = 'products_category';
+		$cat_name          = 'items_category';
 		$cat_name_plural   = 'Categorieën';
 		$cat_name_singular = 'Categorie';
 
 		register_taxonomy($cat_name,
 			// Change to the name of register_post_type
-			array($pt_name),
+			array($cpt_name),
 			array(
 				// Name of the Custom Taxonomy
 				'label' => __($cat_name_plural, $domain),
@@ -213,13 +213,13 @@ class Riesma_Functions {
 		 *  WordPress automatically provides translated labels)
 		 * When using a custom name, (e.g. 'Locations'), use 'labels'.
 		*/
-		$tag_name          = 'products_tag';
+		$tag_name          = 'items_tag';
 		$tag_name_plural   = 'Tags';
 		$tag_name_singular = 'Tag';
 
 		register_taxonomy($tag_name,
 			// Change to the name of register_post_type
-			array($pt_name),
+			array($cpt_name),
 			array(
 				// Name of the Custom Taxonomy
 				'label' => __($tag_name_plural, $domain),
@@ -267,7 +267,7 @@ class Riesma_Functions {
 		// Tags
 		//register_taxonomy_for_object_type('post_tag', $pt_name);
 
-	} // riesma_add_posttype_products
+	}
 
 
 
@@ -280,7 +280,7 @@ class Riesma_Functions {
 				'separator1',
 			'edit.php?post_type=page',
 			'edit.php',
-		//	'edit.php?post_type=custom',
+			'edit.php?post_type=items', // Custom Post Type
 				'separator2',
 			'edit-comments.php',
 			'upload.php',
@@ -296,7 +296,7 @@ class Riesma_Functions {
 
 		array_splice($menu, 1, 0, $ordered_menu);
 		return array_unique($menu);
-	} // riesma_order_admin_menu_items
+	}
 
 
 
@@ -309,7 +309,7 @@ class Riesma_Functions {
 		if (current_user_can('administrator')) {
 			//remove_menu_page('edit.php?post_type=page');
 			//remove_menu_page('edit.php');
-		//	remove_menu_page('edit.php?post_type=custom');
+			//remove_menu_page('edit.php?post_type=custom'); // Custom Post Type
 			//remove_menu_page('edit-comments.php');
 			//remove_menu_page('upload.php');
 			//remove_menu_page('link-manager.php');
@@ -325,18 +325,17 @@ class Riesma_Functions {
 			//remove_menu_page('edit.php?post_type=page');
 			//remove_menu_page('edit.php');
 			//remove_menu_page('edit-comments.php');
-		//	remove_menu_page('edit.php?post_type=custom');
+			//remove_menu_page('edit.php?post_type=custom'); // Custom Post Type
 			//remove_menu_page('upload.php');
 			//remove_menu_page('link-manager.php');
 			//remove_menu_page('profile.php');
 			//remove_menu_page('tools.php');
 		}
-	} // riesma_remove_admin_menu_items
+	}
 
-} // Riesma_Functions
+}
 
 // Instantiate the class
-//global $Riesma_Functions;
 $Riesma_Functions = new Riesma_Functions();
 
 
