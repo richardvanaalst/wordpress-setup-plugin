@@ -300,18 +300,30 @@ class Riesma_Functions {
 	 * Order admin menu items
 	*/
 
-	public function riesma_order_admin_menu_items($menu) {
+	function custom_menu_order( $menu_order ) {
+		if ( !$menu_order ) return true;
+
 		$ordered_menu = array(
+
+			// Dashboard
 			'index.php',
-				'separator1',
+
+			'separator1',
+
+			// Content
 			'edit.php?post_type=page',
 			'edit.php',
-			'edit.php?post_type=items', // Custom Post Type
-				'separator2',
-			'edit-comments.php',
+			'edit.php?post_type=custom', // Custom Post Type, which can be added above
+
+			'separator2',
+
+			// Media and comments
 			'upload.php',
-			'link-manager.php',
-				'separator-last',
+			'edit-comments.php',
+
+			'separator-last',
+
+			// Settings
 			'themes.php',
 			'plugins.php',
 			'users.php',
@@ -320,8 +332,7 @@ class Riesma_Functions {
 			'options-general.php'
 		);
 
-		array_splice($menu, 1, 0, $ordered_menu);
-		return array_unique($menu);
+		return $ordered_menu;
 	}
 
 
