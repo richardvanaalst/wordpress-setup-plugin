@@ -5,7 +5,7 @@
 Plugin Name:   Riesma Functions
 Plugin URI:    http://riesma.nl/
 Description:   Adding custom post types, sorting and hiding admin menu items.
-Version:       1.0.1
+Version:       1.0.2
 Author:        Richard van Aalst
 Author URI:    http://riesma.nl/
 License:       GPL v3
@@ -66,8 +66,8 @@ class Riesma_Functions {
 
 	function Riesma_Functions() {
 
-		// Add post type 'Items'
-		add_action( 'init', array( &$this, 'riesma_add_cpt_items' ) );
+		// Add custom post type(s)
+		add_action( 'init', array( &$this, 'do_add_cpt' ) );
 
 		// Order admin menu items
 		add_filter( 'custom_menu_order', array( &$this, 'custom_menu_order' ) );
@@ -83,7 +83,16 @@ class Riesma_Functions {
 	 * Add custom post type, including (custom) taxonomies
 	*/
 
-	public function riesma_add_cpt_items() {
+	// Add custom post types here by executing more add_cpt()
+	// Riesma_Functions::add_cpt( 'type', 'Name', 'Plural items name', 'Singular item name' );
+	function do_add_cpt() {
+		// Riesma_Functions::add_cpt( 'items', 'Items', 'Items', 'Item' );
+		// Riesma_Functions::add_cpt( 'clients', 'Clients', 'Clients', 'Client' );
+		// Riesma_Functions::add_cpt( 'products', 'Producten', 'Producten', 'Product' );
+		// Riesma_Functions::add_cpt( 'portfolio', 'Portfolio', 'Portfolio cases', 'Portfolio case' );
+	}
+
+	function add_cpt( $cpt, $cpt_name, $cpt_plural, $cpt_singular ) {
 
 		global $domain;
 
@@ -93,44 +102,40 @@ class Riesma_Functions {
 		 * Add the custom post type
 		*/
 
-		$cpt_name          = 'items';
-		$cpt_name_plural   = 'Items';
-		$cpt_name_singular = 'Item';
-
-		register_post_type( $cpt_name,
+		register_post_type( $cpt,
 
 			array(
 				'labels' => array(
 					// Name of the Custom Type group
-					'name'               => __( $cpt_name_plural, $domain ),
+					'name'               => __( $cpt_name, $domain ),
 					// Name of individual Custom Type item
-					'singular_name'      => __( $cpt_name_singular, $domain ),
+					'singular_name'      => __( $cpt_singular, $domain ),
 					// All Items menu item
-					'all_items'          => __( 'Alle ' . strtolower($cpt_name_plural), $domain ),
+					'all_items'          => __( 'Alle ' . strtolower($cpt_plural ), $domain ),
 					// Add New menu item
-					'add_new'            => __( 'Nieuw ' . strtolower($cpt_name_singular), $domain ),
+					'add_new'            => __( 'Nieuw ' . strtolower($cpt_singular ), $domain ),
 					// Add New display title
-					'add_new_item'       => __( 'Nieuw ' . strtolower($cpt_name_singular) . ' toevoegen', $domain ),
+					'add_new_item'       => __( 'Nieuw ' . strtolower($cpt_singular) . ' toevoegen', $domain ),
 					// Edit dialog
 					'edit'               => __( 'Bewerken', $domain ),
 					// Edit display title
-					'edit_item'          => __( $cpt_name_singular . ' bewerken', $domain ),
+					'edit_item'          => __( $cpt_singular . ' bewerken', $domain ),
 					// New display title
-					'new_item'           => __( 'Nieuw ' . strtolower($cpt_name_singular), $domain ),
+					'new_item'           => __( 'Nieuw ' . strtolower($cpt_singular ), $domain ),
 					// View display title
-					'view_item'          => __( $cpt_name_singular . ' bekijken', $domain ),
+					'view_item'          => __( $cpt_singular . ' bekijken', $domain ),
 					// Search Custom Type title
-					'search_items'       => __( $cpt_name_plural . ' zoeken', $domain ),
+					'search_items'       => __( $cpt_plural . ' zoeken', $domain ),
 					// No Entries Yet dialog
-					'not_found'          => __( 'Geen ' . strtolower($cpt_name_plural) . ' gevonden.', $domain ),
+					'not_found'          => __( 'Geen ' . strtolower($cpt_plural) . ' gevonden.', $domain ),
 					// Nothing in the Trash dialog
-					'not_found_in_trash' => __( 'Geen ' . strtolower($cpt_name_plural) . ' gevonden in de prullenbak.', $domain ),
+					'not_found_in_trash' => __( 'Geen ' . strtolower($cpt_plural) . ' gevonden in de prullenbak.', $domain ),
 					// ?
 					'parent_item_colon'  => __( '', $domain )
 				),
 
 				// Custom Type Description
-				'description'         => __( $cpt_name . ' post type.', $domain ),
+				'description'         => __( $cpt . ' post type.', $domain ),
 				// Show in the admin panel
 				'public'              => true,
 				// ?
@@ -141,12 +146,12 @@ class Riesma_Functions {
 				'show_ui'             => true,
 				// Allow vars to be used for querying post-type
 				'query_var'           => true,
-				// Icon of menu item
-				'menu_icon'           => get_stylesheet_directory_uri() . '/library/img/items-icon.png',
+				// Icon of menu item (path based on Bones theme)
+				'menu_icon'           => get_stylesheet_directory_uri() . '/library/img/' . $cpt . '-icon.png',
 				// Rename the URL slug
-				'rewrite'             => array('slug' => str_replace('_', '-', $cpt_name), 'with_front' => false),
+				'rewrite'             => array( 'slug' => str_replace('_', '-', $cpt), 'with_front' => false ),
 				// Rename the archive URL slug
-				'has_archive'         => $cpt_name,
+				'has_archive'         => $cpt,
 				// ?
 				'capability_type'     => 'post',
 				// ?
@@ -168,41 +173,43 @@ class Riesma_Functions {
 		 * When using a custom name, (e.g. 'Locations'), use 'labels'.
 		*/
 
-		$cat_name          = 'items_category';
-		$cat_name_plural   = 'Categorieën';
-		$cat_name_singular = 'Categorie';
+		$cat          = $cpt . '_category';
+		$cat_plural   = 'Categorieën';
+		$cat_singular = 'Categorie';
 
-		register_taxonomy( $cat_name,
+		register_taxonomy( $cat,
 
 			// Name of register_post_type
-			array( $cpt_name ),
+			array( $cpt ),
 
 			array(
+
 				// Name of the Custom Taxonomy
-				'label' => __( $cat_name_plural, $domain ),
+				'label' => __( $cat_plural, $domain ),
+
 				/*
 				// Extended options
 				'labels' => array(
 					// Name of the Custom Taxonomy group
-					'name'              => __( $cat_name_plural, $domain ),
+					'name'              => __( $cat_plural, $domain ),
 					// Name of individual Custom Taxonomy item
-					'singular_name'     => __( $cat_name_singular, $domain ),
+					'singular_name'     => __( $cat_singular, $domain ),
 					// Add New Custom Taxonomy title and button
-					'add_new_item'      => __( 'Nieuwe ' . strtolower($cat_name_singular) . ' toevoegen', $domain ),
+					'add_new_item'      => __( 'Nieuwe ' . strtolower($cat_singular) . ' toevoegen', $domain ),
 					// Edit Custom Taxonomy page title
-					'edit_item'         => __( $cat_name_singular . ' bewerken', $domain ),
+					'edit_item'         => __( $cat_singular . ' bewerken', $domain ),
 					// Update Custom Taxonomy button in Quick Edit
-					'update_item'       => __( $cat_name_singular . ' bijwerken', $domain ),
+					'update_item'       => __( $cat_singular . ' bijwerken', $domain ),
 					// Search Custom Taxonomy button
-					'search_items'      => __( $cat_name_plural . ' zoeken', $domain ),
+					'search_items'      => __( $cat_plural . ' zoeken', $domain ),
 					// All Custom Taxonomy title in taxonomy's panel tab
-					'all_items'         => __( 'Alle ' . strtolower($cat_name_plural), $domain ),
+					'all_items'         => __( 'Alle ' . strtolower($cat_plural), $domain ),
 					// New Custom Taxonomy title in taxonomy's panel tab
-					'new_item_name'     => __( 'Nieuwe ' . strtolower($cat_name_singular) . ' naam', $domain ),
+					'new_item_name'     => __( 'Nieuwe ' . strtolower($cat_singular) . ' naam', $domain ),
 					// Custom Taxonomy Parent in taxonomy's panel select box
-					'parent_item'       => __( $cat_name_singular . ' hoofd', $domain ),
+					'parent_item'       => __( $cat_singular . ' hoofd', $domain ),
 					// Custom Taxonomy Parent title with colon
-					'parent_item_colon' => __( $cat_name_singular . ' hoofd:', $domain )
+					'parent_item_colon' => __( $cat_singular . ' hoofd:', $domain ),
 				),
 				*/
 
@@ -217,7 +224,7 @@ class Riesma_Functions {
 				// Allow vars to be used for querying taxonomy
 				'query_var'         => true,
 				// Rename the URL slug
-				'rewrite'           => array( 'slug' => str_replace('_', '-', $cat_name), 'with_front' => true )
+				'rewrite'           => array( 'slug' => str_replace('_', '-', $cat), 'with_front' => true )
 			)
 		);
 
@@ -233,36 +240,38 @@ class Riesma_Functions {
 		 * When using a custom name, (e.g. 'Locations'), use 'labels'.
 		*/
 
-		$tag_name          = 'items_tag';
-		$tag_name_plural   = 'Tags';
-		$tag_name_singular = 'Tag';
+		$tag          = $cpt . '_tag';
+		$tag_plural   = 'Tags';
+		$tag_singular = 'Tag';
 
-		register_taxonomy( $tag_name,
+		register_taxonomy( $tag,
 
 			// Name of register_post_type
-			array( $cpt_name ),
+			array( $cpt ),
 
 			array(
+
 				// Name of the Custom Taxonomy
-				'label' => __( $tag_name_plural, $domain ),
+				'label' => __( $tag_plural, $domain ),
+
 				/*
 				'labels' => array(
 					// Name of the Custom Taxonomy group
-					'name'              => __( $tag_name_plural, $domain ),
+					'name'              => __( $tag_plural, $domain ),
 					// Name of individual Custom Taxonomy item
-					'singular_name'     => __( $tag_name_singular, $domain ),
+					'singular_name'     => __( $tag_singular, $domain ),
 					// Add New Custom Taxonomy title and button
-					'add_new_item'      => __( 'Nieuwe ' . strtolower($tag_name_singular) . ' toevoegen', $domain ),
+					'add_new_item'      => __( 'Nieuwe ' . strtolower($tag_singular) . ' toevoegen', $domain ),
 					// Edit Custom Taxonomy page title
-					'edit_item'         => __( $tag_name_singular . ' bewerken', $domain ),
+					'edit_item'         => __( $tag_singular . ' bewerken', $domain ),
 					// Update Custom Taxonomy button in Quick Edit
-					'update_item'       => __( $tag_name_singular . ' bijwerken', $domain ),
+					'update_item'       => __( $tag_singular . ' bijwerken', $domain ),
 					// Search Custom Taxonomy button
-					'search_items'      => __( $tag_name_plural . ' zoeken', $domain ),
+					'search_items'      => __( $tag_plural . ' zoeken', $domain ),
 					// All Custom Taxonomy title in taxonomy's panel tab
-					'all_items'         => __( 'Alle ' . strtolower($tag_name_plural), $domain ),
+					'all_items'         => __( 'Alle ' . strtolower($tag_plural), $domain ),
 					// New Custom Taxonomy title in taxonomy's panel tab
-					'new_item_name'     => __( 'Nieuwe ' . strtolower($tag_name_singular) . ' naam', $domain )
+					'new_item_name'     => __( 'Nieuwe ' . strtolower($tag_singular) . ' naam', $domain )
 				),
 				*/
 
@@ -277,7 +286,7 @@ class Riesma_Functions {
 				// Allow vars to be used for querying taxonomy
 				'query_var'         => true,
 				// Rename the URL slug
-				'rewrite'           => array( 'slug' => str_replace('_', '-', $tag_name), 'with_front' => true )
+				'rewrite'           => array( 'slug' => str_replace('_', '-', $tag), 'with_front' => true )
 			)
 		);
 
@@ -288,9 +297,9 @@ class Riesma_Functions {
 		*/
 
 		// Categories
-		// register_taxonomy_for_object_type('category', $pt_name);
+		// register_taxonomy_for_object_type( 'category', $cpt );
 		// Tags
-		// register_taxonomy_for_object_type('post_tag', $pt_name);
+		// register_taxonomy_for_object_type( 'post_tag', $cpt );
 
 	}
 
