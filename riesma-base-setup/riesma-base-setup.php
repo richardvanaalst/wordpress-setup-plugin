@@ -2,7 +2,7 @@
 
 /*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***\
 
-Plugin Name:   Riesma Functions
+Plugin Name:   Riesma Base Setup
 Plugin URI:    http://riesma.nl/
 Description:   Adding custom post types, sorting and hiding admin menu items.
 Version:       1.0.3
@@ -47,7 +47,7 @@ custom meta boxes    https://github.com/jaredatch/Custom-Metaboxes-and-Fields-fo
 
 
 
-class Riesma_Functions {
+class RiesmaBaseSetup {
 
 	/**
 	 * Set domain for translations.
@@ -64,7 +64,7 @@ class Riesma_Functions {
 	 * Class constructor
 	*/
 
-	function Riesma_Functions() {
+	function RiesmaBaseSetup() {
 
 		// Add custom post type(s)
 		add_action( 'init', array( &$this, 'do_add_cpt' ) );
@@ -84,12 +84,12 @@ class Riesma_Functions {
 	*/
 
 	// Add custom post types here by executing more add_cpt()
-	// Riesma_Functions::add_cpt( 'type', 'Name', 'Plural items name', 'Singular item name' );
+	// RiesmaBaseSetup::add_cpt( 'type', 'Name', 'Plural items name', 'Singular item name' );
 	function do_add_cpt() {
-		// Riesma_Functions::add_cpt( 'items', 'Items', 'Items', 'Item' );
-		// Riesma_Functions::add_cpt( 'clients', 'Clients', 'Clients', 'Client' );
-		// Riesma_Functions::add_cpt( 'products', 'Producten', 'Producten', 'Product' );
-		// Riesma_Functions::add_cpt( 'portfolio', 'Portfolio', 'Portfolio cases', 'Portfolio case' );
+		// RiesmaBaseSetup::add_cpt( 'items', 'Items', 'Items', 'Item' );
+		// RiesmaBaseSetup::add_cpt( 'clients', 'Clients', 'Clients', 'Client' );
+		// RiesmaBaseSetup::add_cpt( 'products', 'Producten', 'Producten', 'Product' );
+		// RiesmaBaseSetup::add_cpt( 'portfolio', 'Portfolio', 'Portfolio cases', 'Portfolio case' );
 	}
 
 	function add_cpt( $cpt, $cpt_name, $cpt_plural, $cpt_singular ) {
@@ -388,7 +388,7 @@ class Riesma_Functions {
 
 
 // Instantiate the class
-$Riesma_Functions = new Riesma_Functions();
+$RiesmaBaseSetup = new RiesmaBaseSetup();
 
 
 
