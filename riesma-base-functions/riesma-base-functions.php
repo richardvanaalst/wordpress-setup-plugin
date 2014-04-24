@@ -5,7 +5,7 @@
 Plugin Name:   Riesma Functions
 Plugin URI:    http://riesma.nl/
 Description:   Adding custom post types, sorting and hiding admin menu items.
-Version:       1.0.2
+Version:       1.0.3
 Author:        Richard van Aalst
 Author URI:    http://riesma.nl/
 License:       GPL v3
@@ -353,41 +353,34 @@ class Riesma_Functions {
 
 	function remove_admin_menu_items() {
 
+		// All items:
+		// remove_menu_page( 'index.php' );                 // Dashboard
+		// remove_menu_page( 'edit.php?post_type=page' );   // Pages
+		// remove_menu_page( 'edit.php' );                  // Posts
+		// remove_menu_page( 'edit.php?post_type=custom' ); // Custom Post Type, which can be added above
+		// remove_menu_page( 'upload.php' );                // Media
+		// remove_menu_page( 'edit-comments.php' );         // Comments
+		// remove_menu_page( 'themes.php' );                // Appearance, default: admins only
+		// remove_menu_page( 'plugins.php' );               // Plugins, default: admins only
+		// remove_menu_page( 'users.php' );                 // Users, default: admins only
+		// remove_menu_page( 'profile.php' );               // User profile, default: non-admins
+		// remove_menu_page( 'tools.php' );                 // Tools
+		// remove_menu_page( 'options-general.php' );       // Settings, default: admins only
+
+
+
+		// Remove items which aren't used often for all users by default
+		remove_menu_page( 'edit.php' );
+		remove_menu_page( 'edit-comments.php' );
+		remove_menu_page( 'tools.php' );
+
 		// When logged in as admin
-		if ( current_user_can( 'administrator' ) ) {
-			// Dashboard
-			// remove_menu_page( 'index.php' );
-			// Pages
-			// remove_menu_page( 'edit.php?post_type=page' );
-			// Posts
-			remove_menu_page( 'edit.php' );
-			// Custom Post Type, which can be added above
-			// remove_menu_page( 'edit.php?post_type=custom' );
-			// Media
-			// remove_menu_page( 'upload.php' );
-			// Comments
-			remove_menu_page( 'edit-comments.php' );
-			// Appearance
-			// remove_menu_page( 'themes.php' );
-			// Plugins
-			// remove_menu_page( 'plugins.php' );
-			// Users
-			// remove_menu_page( 'users.php' );
-			// Tools
-			remove_menu_page( 'tools.php' );
-			// Settings
-			// remove_menu_page( 'options-general.php' );
-		}
+		/*if ( current_user_can( 'administrator' ) ) {
+		}*/
 
 		// When not logged in as admin
-		else {
-			remove_menu_page( 'edit.php' );
-			remove_menu_page( 'edit-comments.php' );
-			remove_menu_page( 'themes.php' );
-			remove_menu_page( 'plugins.php' );
-			remove_menu_page( 'tools.php' );
-			remove_menu_page( 'options-general.php' );
-		}
+		/*else {
+		}*/
 	}
 
 }
