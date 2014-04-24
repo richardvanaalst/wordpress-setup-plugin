@@ -342,33 +342,42 @@ class Riesma_Functions {
 	 * Order of items is as they are after running custom_menu_order()
 	*/
 
-	public function riesma_remove_admin_menu_items() {
+	function remove_admin_menu_items() {
 
-		/* When logged in as admin. */
+		// When logged in as admin
 		if ( current_user_can( 'administrator' ) ) {
+			// Dashboard
+			// remove_menu_page( 'index.php' );
+			// Pages
 			// remove_menu_page( 'edit.php?post_type=page' );
-			// remove_menu_page( 'edit.php' );
-			// remove_menu_page( 'edit.php?post_type=custom' ); // Custom Post Type
-			// remove_menu_page( 'edit-comments.php' );
+			// Posts
+			remove_menu_page( 'edit.php' );
+			// Custom Post Type, which can be added above
+			// remove_menu_page( 'edit.php?post_type=custom' );
+			// Media
 			// remove_menu_page( 'upload.php' );
-			// remove_menu_page( 'link-manager.php' );
+			// Comments
+			remove_menu_page( 'edit-comments.php' );
+			// Appearance
 			// remove_menu_page( 'themes.php' );
+			// Plugins
 			// remove_menu_page( 'plugins.php' );
+			// Users
 			// remove_menu_page( 'users.php' );
-			// remove_menu_page( 'tools.php' );
+			// Tools
+			remove_menu_page( 'tools.php' );
+			// Settings
 			// remove_menu_page( 'options-general.php' );
 		}
 
-		/* When not logged in as admin. */
+		// When not logged in as admin
 		else {
-			// remove_menu_page( 'edit.php?post_type=page' );
-			// remove_menu_page( 'edit.php' );
-			// remove_menu_page( 'edit-comments.php' );
-			// remove_menu_page( 'edit.php?post_type=custom' ); // Custom Post Type
-			// remove_menu_page( 'upload.php' );
-			// remove_menu_page( 'link-manager.php' );
-			// remove_menu_page( 'profile.php' );
-			// remove_menu_page( 'tools.php' );
+			remove_menu_page( 'edit.php' );
+			remove_menu_page( 'edit-comments.php' );
+			remove_menu_page( 'themes.php' );
+			remove_menu_page( 'plugins.php' );
+			remove_menu_page( 'tools.php' );
+			remove_menu_page( 'options-general.php' );
 		}
 	}
 
