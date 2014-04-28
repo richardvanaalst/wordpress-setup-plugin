@@ -32,9 +32,11 @@ This plugin uses default translations.
 
 Todo
 1.   Create easier way to edit the settings instead of editing this php file?
-  a.   Via XML, or
-  b.   Admin pages
-2.   Write own translation? Falling back to default for now.
+  a. Via XML, or
+  b. Admin pages
+2.   Set default screen options.
+3.   Add Custom Post Type archive pages to menu (still needed?) (http://wordpress.org/plugins/add-custom-post-types-archive-to-nav-menus/).
+4.   Write own translation? Falling back to default for now.
 
 *** *** *** *** *** *** *** *** ***
 
