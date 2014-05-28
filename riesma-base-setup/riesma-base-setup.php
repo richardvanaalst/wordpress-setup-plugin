@@ -36,7 +36,7 @@ Todo
   b. Admin pages
 2.   Set default screen options.
 3.   Add Custom Post Type archive pages to menu (still needed?) (http://wordpress.org/plugins/add-custom-post-types-archive-to-nav-menus/).
-4.   Write own translation? Falling back to default for now.
+4.   Add translation: _x( 'text', 'context' ) => 'Nieuw' vs 'Nieuwe'
 
 *** *** *** *** *** *** *** *** ***
 
@@ -50,17 +50,6 @@ custom meta boxes    https://github.com/jaredatch/Custom-Metaboxes-and-Fields-fo
 
 
 class RiesmaBaseSetup {
-
-	/**
-	 * Set domain for translations.
-	*/
-
-	// WordPress default translations
-	private $domain = 'default';
-	// Riesma translations
-	//private domain = 'riesma';
-
-
 
 	/**
 	 * Class constructor
@@ -89,16 +78,12 @@ class RiesmaBaseSetup {
 	// RiesmaBaseSetup::add_cpt( 'type', 'Name', 'Plural items name', 'Singular item name' );
 	function do_add_cpt() {
 		// RiesmaBaseSetup::add_cpt( 'items', 'Items', 'Items', 'Item' );
-		// RiesmaBaseSetup::add_cpt( 'clients', 'Clients', 'Clients', 'Client' );
+		// RiesmaBaseSetup::add_cpt( 'clients', 'Cliënten', 'Cliënten', 'Cliënt' );
 		// RiesmaBaseSetup::add_cpt( 'products', 'Producten', 'Producten', 'Product' );
 		// RiesmaBaseSetup::add_cpt( 'portfolio', 'Portfolio', 'Portfolio cases', 'Portfolio case' );
 	}
 
 	function add_cpt( $cpt, $cpt_name, $cpt_plural, $cpt_singular ) {
-
-		global $domain;
-
-
 
 		/**
 		 * Add the custom post type
@@ -109,35 +94,35 @@ class RiesmaBaseSetup {
 			array(
 				'labels' => array(
 					// Name of the Custom Type group
-					'name'               => __( $cpt_name, $domain ),
+					'name'               => _x( $cpt_name, 'post type general name' ),
 					// Name of individual Custom Type item
-					'singular_name'      => __( $cpt_singular, $domain ),
+					'singular_name'      => _x( $cpt_singular, 'post type singular name' ),
+					// Name of menu item
+					'menu_name'          => _x( $cpt_name, 'admin menu' ),
 					// All Items menu item
-					'all_items'          => __( 'Alle ' . strtolower($cpt_plural ), $domain ),
+					'all_items'          => __( 'Alle ' . strtolower($cpt_plural) ),
 					// Add New menu item
-					'add_new'            => __( 'Nieuw ' . strtolower($cpt_singular ), $domain ),
+					'add_new'            => __( 'Nieuw ' . strtolower($cpt_singular) ),
 					// Add New display title
-					'add_new_item'       => __( 'Nieuw ' . strtolower($cpt_singular) . ' toevoegen', $domain ),
-					// Edit dialog
-					'edit'               => __( 'Bewerken', $domain ),
+					'add_new_item'       => __( 'Nieuw ' . strtolower($cpt_singular) . ' toevoegen' ),
 					// Edit display title
-					'edit_item'          => __( $cpt_singular . ' bewerken', $domain ),
+					'edit_item'          => __( $cpt_singular . ' bewerken' ),
 					// New display title
-					'new_item'           => __( 'Nieuw ' . strtolower($cpt_singular ), $domain ),
+					'new_item'           => __( 'Nieuw ' . strtolower($cpt_singular) ),
 					// View display title
-					'view_item'          => __( $cpt_singular . ' bekijken', $domain ),
+					'view_item'          => __( $cpt_singular . ' bekijken' ),
 					// Search Custom Type title
-					'search_items'       => __( $cpt_plural . ' zoeken', $domain ),
+					'search_items'       => __( $cpt_plural . ' zoeken' ),
 					// No Entries Yet dialog
-					'not_found'          => __( 'Geen ' . strtolower($cpt_plural) . ' gevonden.', $domain ),
+					'not_found'          => __( 'Geen ' . strtolower($cpt_plural) . ' gevonden' ),
 					// Nothing in the Trash dialog
-					'not_found_in_trash' => __( 'Geen ' . strtolower($cpt_plural) . ' gevonden in de prullenbak.', $domain ),
+					'not_found_in_trash' => __( 'Geen ' . strtolower($cpt_plural) . ' gevonden in de prullenbak' ),
 					// ?
-					'parent_item_colon'  => __( '', $domain )
+					'parent_item_colon'  => ''
 				),
 
 				// Custom Type Description
-				'description'         => __( $cpt . ' post type.', $domain ),
+				'description'         => __( $cpt . ' post type' ),
 				// Show in the admin panel
 				'public'              => true,
 				// ?
@@ -187,31 +172,31 @@ class RiesmaBaseSetup {
 			array(
 
 				// Name of the Custom Taxonomy
-				'label' => __( $cat_plural, $domain ),
+				'label' => __( $cat_plural ),
 
 				/*
 				// Extended options
 				'labels' => array(
 					// Name of the Custom Taxonomy group
-					'name'              => __( $cat_plural, $domain ),
+					'name'              => __( $cat_plural ),
 					// Name of individual Custom Taxonomy item
-					'singular_name'     => __( $cat_singular, $domain ),
+					'singular_name'     => __( $cat_singular ),
 					// Add New Custom Taxonomy title and button
-					'add_new_item'      => __( 'Nieuwe ' . strtolower($cat_singular) . ' toevoegen', $domain ),
+					'add_new_item'      => __( 'Nieuwe ' . strtolower($cat_singular) . ' toevoegen' ),
 					// Edit Custom Taxonomy page title
-					'edit_item'         => __( $cat_singular . ' bewerken', $domain ),
+					'edit_item'         => __( $cat_singular . ' bewerken' ),
 					// Update Custom Taxonomy button in Quick Edit
-					'update_item'       => __( $cat_singular . ' bijwerken', $domain ),
+					'update_item'       => __( $cat_singular . ' bijwerken' ),
 					// Search Custom Taxonomy button
-					'search_items'      => __( $cat_plural . ' zoeken', $domain ),
+					'search_items'      => __( $cat_plural . ' zoeken' ),
 					// All Custom Taxonomy title in taxonomy's panel tab
-					'all_items'         => __( 'Alle ' . strtolower($cat_plural), $domain ),
+					'all_items'         => __( 'Alle ' . strtolower($cat_plural) ),
 					// New Custom Taxonomy title in taxonomy's panel tab
-					'new_item_name'     => __( 'Nieuwe ' . strtolower($cat_singular) . ' naam', $domain ),
+					'new_item_name'     => __( 'Nieuwe ' . strtolower($cat_singular) . ' naam' ),
 					// Custom Taxonomy Parent in taxonomy's panel select box
-					'parent_item'       => __( $cat_singular . ' hoofd', $domain ),
+					'parent_item'       => __( $cat_singular . ' hoofd' ),
 					// Custom Taxonomy Parent title with colon
-					'parent_item_colon' => __( $cat_singular . ' hoofd:', $domain ),
+					'parent_item_colon' => __( $cat_singular . ' hoofd:' ),
 				),
 				*/
 
@@ -254,26 +239,26 @@ class RiesmaBaseSetup {
 			array(
 
 				// Name of the Custom Taxonomy
-				'label' => __( $tag_plural, $domain ),
+				'label' => __( $tag_plural ),
 
 				/*
 				'labels' => array(
 					// Name of the Custom Taxonomy group
-					'name'              => __( $tag_plural, $domain ),
+					'name'              => __( $tag_plural ),
 					// Name of individual Custom Taxonomy item
-					'singular_name'     => __( $tag_singular, $domain ),
+					'singular_name'     => __( $tag_singular ),
 					// Add New Custom Taxonomy title and button
-					'add_new_item'      => __( 'Nieuwe ' . strtolower($tag_singular) . ' toevoegen', $domain ),
+					'add_new_item'      => __( 'Nieuwe ' . strtolower($tag_singular) . ' toevoegen' ),
 					// Edit Custom Taxonomy page title
-					'edit_item'         => __( $tag_singular . ' bewerken', $domain ),
+					'edit_item'         => __( $tag_singular . ' bewerken' ),
 					// Update Custom Taxonomy button in Quick Edit
-					'update_item'       => __( $tag_singular . ' bijwerken', $domain ),
+					'update_item'       => __( $tag_singular . ' bijwerken' ),
 					// Search Custom Taxonomy button
-					'search_items'      => __( $tag_plural . ' zoeken', $domain ),
+					'search_items'      => __( $tag_plural . ' zoeken' ),
 					// All Custom Taxonomy title in taxonomy's panel tab
-					'all_items'         => __( 'Alle ' . strtolower($tag_plural), $domain ),
+					'all_items'         => __( 'Alle ' . strtolower($tag_plural) ),
 					// New Custom Taxonomy title in taxonomy's panel tab
-					'new_item_name'     => __( 'Nieuwe ' . strtolower($tag_singular) . ' naam', $domain )
+					'new_item_name'     => __( 'Nieuwe ' . strtolower($tag_singular) . ' naam' )
 				),
 				*/
 
