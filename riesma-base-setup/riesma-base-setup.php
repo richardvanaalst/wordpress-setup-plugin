@@ -69,7 +69,7 @@ class RiesmaBaseSetup {
 		add_filter( 'menu_order', array( &$this, 'custom_menu_order' ) );
 
 		// Remove admin menu items
-		add_action( 'admin_menu', array( &$this, 'remove_admin_menu_items' ) );
+		add_action( 'admin_menu', array( &$this, 'hide_admin_menu_items' ) );
 	}
 
 
@@ -397,7 +397,7 @@ class RiesmaBaseSetup {
 	 * Order of items is as they are after running custom_menu_order()
 	*/
 
-	function remove_admin_menu_items() {
+	function hide_admin_menu_items() {
 
 		// All items:
 		// remove_menu_page( 'index.php' );                 // Dashboard
