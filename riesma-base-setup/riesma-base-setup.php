@@ -356,35 +356,31 @@ class RiesmaBaseSetup {
 	*/
 
 	function custom_menu_order( $menu_order ) {
+
 		if ( !$menu_order ) return true;
 
+		// Default order:
+		// 'index.php',                 // Dashboard
+		// 'separator1',
+		// 'edit.php',                  // Posts
+		// 'upload.php',                // Media
+		// 'edit.php?post_type=page',   // Pages
+		// 'edit-comments.php',         // Comments
+		// 'edit.php?post_type=custom', // A custom post type, when menu_position isn't null
+		// 'separator-last',            // It's possible to add another 'separator2'
+		// 'themes.php',                // Appearance, admins only
+		// 'plugins.php',               // Plugins, admins only
+		// 'users.php',                 // Users, admins only
+		// 'profile.php',               // Profile, non-admins
+		// 'tools.php',                 // Tools
+		// 'options-general.php'        // Settings, admins only
+
+
 		$ordered_menu = array(
-
-			// Dashboard
 			'index.php',
-
 			'separator1',
-
-			// Content
-			'edit.php?post_type=page',
 			'edit.php',
-			'edit.php?post_type=custom', // A custom post type, which can be added above
-
-			'separator2',
-
-			// Media and comments
-			'upload.php',
-			'edit-comments.php',
-
-			'separator-last',
-
-			// Settings
-			'themes.php',
-			'plugins.php',
-			'users.php',
-			'profile.php',
-			'tools.php',
-			'options-general.php'
+			'edit.php?post_type=page'
 		);
 
 		return $ordered_menu;
@@ -393,42 +389,41 @@ class RiesmaBaseSetup {
 
 
 	/**
-	 * Remove admin menu items
+	 * Hide admin menu items
 	 * Order of items is as they are after running custom_menu_order()
 	*/
 
 	function hide_admin_menu_items() {
 
-		// All items:
+		// All items for reference:
 		// remove_menu_page( 'index.php' );                 // Dashboard
 		// remove_menu_page( 'edit.php?post_type=page' );   // Pages
 		// remove_menu_page( 'edit.php' );                  // Posts
 		// remove_menu_page( 'edit.php?post_type=custom' ); // A custom post type, which can be added above
 		// remove_menu_page( 'upload.php' );                // Media
 		// remove_menu_page( 'edit-comments.php' );         // Comments
-		// remove_menu_page( 'themes.php' );                // Appearance, default: admins only
-		// remove_menu_page( 'plugins.php' );               // Plugins, default: admins only
-		// remove_menu_page( 'users.php' );                 // Users, default: admins only
-		// remove_menu_page( 'profile.php' );               // User profile, default: non-admins
+		// remove_menu_page( 'themes.php' );                // Appearance, admins only
+		// remove_menu_page( 'plugins.php' );               // Plugins, admins only
+		// remove_menu_page( 'users.php' );                 // Users, admins only
+		// remove_menu_page( 'profile.php' );               // Profile, non-admins
 		// remove_menu_page( 'tools.php' );                 // Tools
-		// remove_menu_page( 'options-general.php' );       // Settings, default: admins only
+		// remove_menu_page( 'options-general.php' );       // Settings, admins only
 
-
-
-		// Remove items which aren't used often for all users by default
-		remove_menu_page( 'edit.php' );
-		remove_menu_page( 'edit-comments.php' );
-		remove_menu_page( 'tools.php' );
 
 		// When logged in as admin
-		/*if ( current_user_can( 'administrator' ) ) {
-		}*/
+		if ( current_user_can( 'administrator' ) ) {
+			remove_menu_page( 'edit.php' );
+			remove_menu_page( 'edit-comments.php' );
+		}
 
 		// When not logged in as admin
-		/*else {
-		}*/
-	}
+		if ( ! current_user_can( 'administrator' ) ) {
+			remove_menu_page( 'edit.php' );
+			remove_menu_page( 'edit-comments.php' );
+			remove_menu_page( 'tools.php' );
+		}
 
+	}
 }
 
 
