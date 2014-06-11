@@ -54,14 +54,14 @@ class RiesmaSetup {
 	function RiesmaSetup() {
 
 		// Add custom post type(s) and taxonomy
-		add_action( 'init', array( &$this, 'add_cpt' ) );
+		add_action( 'init', array( $this, 'add_cpt' ) );
 
 		// Order admin menu items
-		add_filter( 'custom_menu_order', array( &$this, 'custom_menu_order' ) );
-		add_filter( 'menu_order', array( &$this, 'custom_menu_order' ) );
+		add_filter( 'custom_menu_order', array( $this, 'custom_menu_order' ) );
+		add_filter( 'menu_order', array( $this, 'custom_menu_order' ) );
 
 		// Hide admin menu items
-		add_action( 'admin_menu', array( &$this, 'hide_admin_menu_items' ) );
+		add_action( 'admin_menu', array( $this, 'hide_admin_menu_items' ) );
 	}
 
 
