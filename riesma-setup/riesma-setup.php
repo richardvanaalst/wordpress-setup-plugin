@@ -67,79 +67,19 @@ class RiesmaSetup {
 
 
 	/**
-	 * Add custom post type, including (custom) taxonomies,
-	 * by adding to the cpts array.
-	 * See (dutch) usage examples below.
-	 *
-	 * hierarchical: false = post, true = page
-	 *
-	 * taxonomies: has predefined options which can optionally be used in an array(args)
-	 *   cat       categories
-	 *   tag       tags
-	 *   WP_cat    WordPress default categories
-	 *   WP_tag    WordPress default tags
+	 * Add custom post type, including (custom) taxonomies
 	*/
 
 	function add_cpt() {
 
-		$cpts = array();
+		// Load the custom post types
+		require_once( 'riesma-setup-cpt.php' );
 
-		// Items
-		/*$cpts[] = array(
-			'posttype'     => 'items',
-			'name'         => 'Items',
-			'plural'       => 'Item',
-			'singular'     => 'Item',
-			'hierarchical' => false,
-			'taxonomies'   => array('cat', 'tag')
-		);*/
+		if ( !empty( $cpts ) && is_array( $cpts ) ) {
 
-		// Portfolio
-		/*$cpts[] = array(
-			'posttype'     => 'portfolio',
-			'name'         => 'Portfolio',
-			'plural'       => 'Portfolio cases',
-			'singular'     => 'Portfolio case',
-			'hierarchical' => false,
-			'taxonomies'   => array('cat', 'tag')
-		);*/
-
-		// Clients
-		/*$cpts[] = array(
-			'posttype'     => 'clients',
-			'name'         => 'Cliënten',
-			'plural'       => 'Cliënten',
-			'singular'     => 'Cliënt',
-			'hierarchical' => false,
-			'taxonomies'   => array('cat', 'tag')
-		);*/
-
-		// Products
-		/*$cpts[] = array(
-			'posttype'     => 'products',
-			'name'         => 'Producten',
-			'plural'       => 'Producten',
-			'singular'     => 'Product',
-			'hierarchical' => false,
-			'taxonomies'   => array(
-				'cat',
-				'tag',
-				array(
-					'taxonomy' => 'collections',
-					'name'     => 'Collecties',
-					'plural'   => 'Collecties',
-					'singular' => 'Collectie'
-				)
-			)
-		);*/
-
-
-
-		/**
-		 * The Custom Post Type Loop
-		*/
-
-		if ( is_array( $cpts ) ) {
+			/**
+			 * The Custom Post Type Loop
+			*/
 
 			foreach ( $cpts as $cpt ) {
 
@@ -239,10 +179,9 @@ class RiesmaSetup {
 				 * Add custom taxonomy
 				 */
 
-				if ( is_array( $cpt_taxonomies ) ) {
+				if ( !empty( $cpt_taxonomies ) && is_array( $cpt_taxonomies ) ) {
 
 					foreach ( $cpt_taxonomies as $cpt_taxonomy ) {
-
 
 						// Categories (predefined): WordPress provides translation
 						if ( $cpt_taxonomy == 'cat' ) {
