@@ -1,14 +1,11 @@
 <?php
-
-/*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***\
-
+/*
 Plugin Name:   Riesma Setup
 Plugin URI:    http://riesma.nl/
 Description:   Adding custom post types, sorting and hiding admin menu items.
 Version:       1.0.4
 Author:        Richard van Aalst
 Author URI:    http://riesma.nl/
-License:       GPL v3
 
 Copyright (C) 2012-2014 Richard van Aalst
 This program is free software: you can redistribute it and/or modify
@@ -23,9 +20,9 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 
-*** *** *** *** *** *** *** *** ***
-
+/*
 Usage
 Edit this php file for adding custom post types, sorting the admin menu etc.
 This plugin uses default translations.
@@ -35,40 +32,34 @@ Todo
   a. Via XML, or
   b. Admin pages
 2.   Set default screen options.
-3.   Add Custom Post Type archive pages to menu (still needed?) (http://wordpress.org/plugins/add-custom-post-types-archive-to-nav-menus/).
+3.   Add Custom Post Type archive pages to menu (still needed?)
+     (http://wordpress.org/plugins/add-custom-post-types-archive-to-nav-menus/)
 4.   Set menu order dynamically for custom post types
 5.   Rename the URL slug: find better way to swap characters and character encoding!
 6.   Add custom taxonomy
 7.   Add translation: _x( 'text', 'context' ) => 'Nieuw' vs 'Nieuwe'?
-
-*** *** *** *** *** *** *** *** ***
 
 More information
 register_post_type   http://codex.wordpress.org/Function_Reference/register_post_type
 register_taxonomy    http://codex.wordpress.org/Function_Reference/register_taxonomy
 custom meta boxes    https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress
 custom post type     http://www.smashingmagazine.com/2012/11/08/complete-guide-custom-post-types/
-
-\*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***/
+*/
 
 
 
 class RiesmaSetup {
 
-	/**
-	 * Class constructor
-	*/
-
 	function RiesmaSetup() {
 
-		// Add custom post type(s)
+		// Add custom post type(s) and taxonomy
 		add_action( 'init', array( &$this, 'add_cpt' ) );
 
 		// Order admin menu items
 		add_filter( 'custom_menu_order', array( &$this, 'custom_menu_order' ) );
 		add_filter( 'menu_order', array( &$this, 'custom_menu_order' ) );
 
-		// Remove admin menu items
+		// Hide admin menu items
 		add_action( 'admin_menu', array( &$this, 'hide_admin_menu_items' ) );
 	}
 
@@ -155,8 +146,8 @@ class RiesmaSetup {
 			$cpt_singular     = $cpt_props['singular'];
 			$cpt_hierarchical = !empty($cpt_props['hierarchical']) ? $cpt_props['hierarchical'] : false;
 			$cpt_taxonomies   = !empty($cpt_props['taxonomies']) ? $cpt_props['taxonomies'] : false;
-			$cpt_slug         = RiesmaBaseHelper::slug($cpt_name);
-			$cpt_icon         = RiesmaBaseHelper::icon($cpt);
+			$cpt_slug         = RiesmaHelper::slug($cpt_name);
+			$cpt_icon         = RiesmaHelper::icon($cpt);
 
 
 
@@ -255,7 +246,7 @@ class RiesmaSetup {
 						array(
 							'hierarchical' => true,
 							'rewrite'      => array(
-							    'slug'     => $cpt_slug . '-' . RiesmaBaseHelper::slug( __( 'Categories' ) )
+							    'slug'     => $cpt_slug . '-' . RiesmaHelper::slug( __( 'Categories' ) )
 							)
 						)
 					);
@@ -270,7 +261,7 @@ class RiesmaSetup {
 						array(
 							'hierarchical' => false,
 							'rewrite'      => array(
-							    'slug'     => $cpt_slug . '-' . RiesmaBaseHelper::slug( __( 'Tags' ) )
+							    'slug'     => $cpt_slug . '-' . RiesmaHelper::slug( __( 'Tags' ) )
 							)
 						)
 					);
@@ -339,7 +330,7 @@ class RiesmaSetup {
 							'query_var'         => true,
 							// Rename the URL slug
 							'rewrite'           => array(
-							    'slug'          => $cpt_slug . '-' . RiesmaBaseHelper::slug( $tax_plural )
+							    'slug'          => $cpt_slug . '-' . RiesmaHelper::slug( $tax_plural )
 							)
 						)
 					);

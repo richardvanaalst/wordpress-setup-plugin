@@ -1,6 +1,6 @@
 === Riesma Setup ===
 Contributors: Richard van Aalst
-Donate link: http://riesma.nl
+Donate link: http://riesma.nl/
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl.html
 Tags: functions
