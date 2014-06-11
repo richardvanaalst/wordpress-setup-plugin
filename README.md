@@ -1,8 +1,7 @@
 WordPress Base Setup
 ========================
 
-Adding base functions and setting to WordPress, for creating custom post types, ordering and removing admin menu items etc.
-
+Adding some basic functions and settings to WordPress.
 
 
 # Riesma Base Setup
@@ -13,17 +12,13 @@ Adding base functions and setting to WordPress, for creating custom post types, 
 - License URI: http://www.gnu.org/licenses/gpl.html
 - Tags: functions
 - Requires at least: 3.x
-- Tested up to: 3.9
-- Stable tag: 1.0.0
-
-Add some base functions and settings.
-
+- Tested up to: 3.9.1
+- Stable tag: 1.0.4
 
 
 ## Description
 
-Add Riesma's functions for creating custom post types, order and removing admin menu items, etc.
-
+Add and edit this plugin's functions for creating custom post types and taxonomies, cleanup and sort admin menu items.
 
 
 ## Installation
