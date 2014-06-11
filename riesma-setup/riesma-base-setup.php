@@ -2,7 +2,7 @@
 
 /*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***\
 
-Plugin Name:   Riesma Base Setup
+Plugin Name:   Riesma Setup
 Plugin URI:    http://riesma.nl/
 Description:   Adding custom post types, sorting and hiding admin menu items.
 Version:       1.0.4
