@@ -3,7 +3,7 @@
 Plugin Name:   Riesma Setup
 Plugin URI:    http://riesma.nl/
 Description:   Adding custom post types, sorting and hiding admin menu items.
-Version:       1.0.4
+Version:       1.0.5
 Author:        Richard van Aalst
 Author URI:    http://riesma.nl/
 
@@ -89,8 +89,8 @@ class RiesmaSetup {
 				$cpt_singular     = $cpt['singular'];
 				$cpt_hierarchical = !empty( $cpt['hierarchical'] ) ? $cpt['hierarchical'] : false;
 				$cpt_taxonomies   = !empty( $cpt['taxonomies'] ) ? $cpt['taxonomies'] : false;
-				$cpt_slug         = RiesmaHelper::slug( $cpt_name );
-				$cpt_icon         = RiesmaHelper::icon( $the_posttype );
+				$cpt_slug         = $this->slug( $cpt_name );
+				$cpt_icon         = $this->icon( $the_posttype );
 
 
 
@@ -191,7 +191,7 @@ class RiesmaSetup {
 								array(
 									'hierarchical'   => true,
 									'rewrite'        => array(
-									    'slug'       => $cpt_slug . '-' . RiesmaHelper::slug( __( 'Categories' ) ),
+									    'slug'       => $cpt_slug . '-' . $this->slug( __( 'Categories' ) ),
 									    'with_front' => true
 									)
 								)
@@ -207,7 +207,7 @@ class RiesmaSetup {
 								array(
 									'hierarchical'   => false,
 									'rewrite'        => array(
-									    'slug'       => $cpt_slug . '-' . RiesmaHelper::slug( __( 'Tags' ) ),
+									    'slug'       => $cpt_slug . '-' . $this->slug( __( 'Tags' ) ),
 									    'with_front' => true
 									)
 								)
@@ -235,7 +235,7 @@ class RiesmaSetup {
 							$tax_plural       = $cpt_taxonomy['plural'];
 							$tax_singular     = $cpt_taxonomy['singular'];
 							$tax_hierarchical = !empty( $cpt_taxonomy['hierarchical'] ) ? $cpt_taxonomy['hierarchical'] : true;
-							$tax_slug         = $cpt_slug . '-' . RiesmaHelper::slug( $tax_name );
+							$tax_slug         = $cpt_slug . '-' . $this->slug( $tax_name );
 
 
 							register_taxonomy( $the_tax,
@@ -368,17 +368,21 @@ class RiesmaSetup {
 		}
 	}
 
-}
 
 
 
-class RiesmaHelper {
+
+
+	/** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	 * Helper functions
+	 *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** */
+
 
 	/**
 	 * Create clean slug
 	 * !! Improve this: __() returns &235; instead of ë
 	 */
-	function slug( $slug ) {
+	private function slug( $slug ) {
 		return str_replace( array(' ', '"'), array('-', ''), iconv( 'UTF-8', 'ASCII//TRANSLIT//IGNORE', strtolower($slug) ) );
 	}
 
@@ -387,7 +391,7 @@ class RiesmaHelper {
 	 * Check if icon file exists, else return default icon (Posts)
 	 * Path based on Bones theme
 	 */
-	function icon( $cpt ) {
+	private function icon( $cpt ) {
 		$file = get_stylesheet_directory_uri() . '/library/img/' . $cpt . '-icon.png';
 		$icon = file_exists($file) ? $file : false;
 		return $icon;
