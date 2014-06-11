@@ -37,7 +37,8 @@ Todo
 4.   Set menu order dynamically for custom post types
 5.   Rename the URL slug: find better way to swap characters and character encoding!
 6.   Add custom taxonomy
-7.   Add translation: _x( 'text', 'context' ) => 'Nieuw' vs 'Nieuwe'?
+7.   Auto-refresh permalinks after adding custom post type
+8.   Add translation: _x( 'text', 'context' ) => 'Nieuw' vs 'Nieuwe'?
 
 More information
 register_post_type   http://codex.wordpress.org/Function_Reference/register_post_type
@@ -138,205 +139,217 @@ class RiesmaSetup {
 		 * The Custom Post Type Loop
 		*/
 
-		foreach ( $cpts as $cpt_props ) {
+		if ( is_array( $cpts ) ) {
 
-			$cpt              = $cpt_props['posttype'];
-			$cpt_name         = $cpt_props['name'];
-			$cpt_plural       = $cpt_props['plural'];
-			$cpt_singular     = $cpt_props['singular'];
-			$cpt_hierarchical = !empty($cpt_props['hierarchical']) ? $cpt_props['hierarchical'] : false;
-			$cpt_taxonomies   = !empty($cpt_props['taxonomies']) ? $cpt_props['taxonomies'] : false;
-			$cpt_slug         = RiesmaHelper::slug($cpt_name);
-			$cpt_icon         = RiesmaHelper::icon($cpt);
+			foreach ( $cpts as $cpt ) {
+
+				$the_posttype     = $cpt['posttype'];
+				$cpt_name         = $cpt['name'];
+				$cpt_plural       = $cpt['plural'];
+				$cpt_singular     = $cpt['singular'];
+				$cpt_hierarchical = !empty( $cpt['hierarchical'] ) ? $cpt['hierarchical'] : false;
+				$cpt_taxonomies   = !empty( $cpt['taxonomies'] ) ? $cpt['taxonomies'] : false;
+				$cpt_slug         = RiesmaHelper::slug( $cpt_name );
+				$cpt_icon         = RiesmaHelper::icon( $the_posttype );
 
 
 
-			/**
-			 * Add the custom post type
-			*/
+				/**
+				 * Add the custom post type
+				 */
 
-			register_post_type( $cpt,
+				register_post_type( $the_posttype,
 
-				array(
-					'labels' => array(
-						// Name of the custom post type group
-						'name'               => _x( $cpt_name, 'post type general name' ),
-						// Name of individual custom post type item (default: name)
-						'singular_name'      => _x( $cpt_singular, 'post type singular name' ),
-						// Name of menu item (default: name)
-						// 'menu_name'          => _x( $cpt_name, 'admin menu' ),
-						// Name in admin bar dropdown (default: singular_name | name)
-						// 'name_admin_bar'     => _x( $cpt_name, 'add new on admin bar' ),
-						// All Items menu item (default: name)
-						'all_items'          => __( 'Alle ' . strtolower($cpt_plural) ),
-						// Add New menu item
-						'add_new'            => __( $cpt_singular . ' toevoegen' ),
-						// Add New display title
-						'add_new_item'       => __( $cpt_singular . '  toevoegen' ),
-						// Edit display title
-						'edit_item'          => __( $cpt_singular . ' bewerken' ),
-						// New display title
-						'new_item'           => __( $cpt_singular . ' toevoegen' ),
-						// View display title
-						'view_item'          => __( $cpt_singular . ' bekijken' ),
-						// Search custom post type title
-						'search_items'       => __( $cpt_plural . ' zoeken' ),
-						// No Entries Yet dialog
-						'not_found'          => __( 'Geen ' . strtolower($cpt_plural) . ' gevonden' ),
-						// Nothing in the Trash dialog
-						'not_found_in_trash' => __( 'Geen ' . strtolower($cpt_plural) . ' gevonden in de prullenbak' ),
-						// Parent text, hierarchical types (pages) only
-						'parent_item_colon'  => ''
-					),
+					array(
+						'labels' => array(
+							// Name of the custom post type group
+							'name'               => _x( $cpt_name, 'post type general name' ),
+							// Name of individual custom post type item (default: name)
+							'singular_name'      => _x( $cpt_singular, 'post type singular name' ),
+							// Name of menu item (default: name)
+							// 'menu_name'          => _x( $cpt_name, 'admin menu' ),
+							// Name in admin bar dropdown (default: singular_name | name)
+							// 'name_admin_bar'     => _x( $cpt_name, 'add new on admin bar' ),
+							// All Items menu item (default: name)
+							'all_items'          => __( 'Alle ' . strtolower($cpt_plural) ),
+							// Add New menu item
+							'add_new'            => __( $cpt_singular . ' toevoegen' ),
+							// Add New display title
+							'add_new_item'       => __( $cpt_singular . '  toevoegen' ),
+							// Edit display title
+							'edit_item'          => __( $cpt_singular . ' bewerken' ),
+							// New display title
+							'new_item'           => __( $cpt_singular . ' toevoegen' ),
+							// View display title
+							'view_item'          => __( $cpt_singular . ' bekijken' ),
+							// Search custom post type title
+							'search_items'       => __( $cpt_plural . ' zoeken' ),
+							// No Entries Yet dialog
+							'not_found'          => __( 'Geen ' . strtolower($cpt_plural) . ' gevonden' ),
+							// Nothing in the Trash dialog
+							'not_found_in_trash' => __( 'Geen ' . strtolower($cpt_plural) . ' gevonden in de prullenbak' ),
+							// Parent text, hierarchical types (pages) only
+							'parent_item_colon'  => ''
+						),
 
-					// Custom post type description
-					'description'         => __( $cpt . ' post type.' ),
+						// Custom post type description
+						'description'         => __( $cpt_name . ' post type.' ),
 
-					// Show in the admin panel
-					'public'              => true,
-					// Position in admin menu (integer, default: null, below Comments)
-					// Remember that custom_menu_order will override this
-					'menu_position'       => 5,
-					// Icon of menu item
-					'menu_icon'           => $cpt_icon,
+						// Show in the admin panel
+						'public'              => true,
+						// Position in admin menu (integer, default: null, below Comments)
+						// Remember that custom_menu_order will override this
+						'menu_position'       => 5,
+						// Icon of menu item
+						'menu_icon'           => $cpt_icon,
 
-					// String used for creating 'read', 'edit' and 'delete' links
-					'capability_type'     => 'post',
+						// String used for creating 'read', 'edit' and 'delete' links
+						'capability_type'     => 'post',
 
-					// Allow parent to be set (post vs page type)
-					'hierarchical'        => $cpt_hierarchical,
-					// Enable options in the post editor
-					'supports'            => array(
-					    'title',
-					    'editor',
-					    'author',
-					    'thumbnail',
-					    'excerpt',
-					    'trackbacks',
-					    'custom-fields',
-					    'comments',
-					    'revisions',
-					    'page-attributes',
-					    'post-formats'
-					),
+						// Allow parent to be set (post vs page type)
+						'hierarchical'        => $cpt_hierarchical,
+						// Enable options in the post editor
+						'supports'            => array(
+						    'title',
+						    'editor',
+						    'author',
+						    'thumbnail',
+						    'excerpt',
+						    'trackbacks',
+						    'custom-fields',
+						    'comments',
+						    'revisions',
+						    'page-attributes',
+						    'post-formats'
+						),
 
-					// Rename the archive URL slug (default: false | post_type ($cpt) when true)
-					'has_archive'         => true,
-					// Rename the URL slug
-					'rewrite'             => array(
-					    'slug'            => $cpt_slug
+						// Rename the archive URL slug
+						'has_archive'         => $cpt_slug,
+						// Rename the URL slug
+						'rewrite'             => array(
+						    'slug'            => $cpt_slug,
+						    'with_front'      => true
+						)
 					)
-				)
-			);
+				);
 
 
 
-			/**
-			 * Add custom taxonomy
-			*/
+				/**
+				 * Add custom taxonomy
+				 */
 
-			foreach ( $cpt_taxonomies as $cpt_taxonomy ) {
+				if ( is_array( $cpt_taxonomies ) ) {
+
+					foreach ( $cpt_taxonomies as $cpt_taxonomy ) {
 
 
-				// Categories (predefined): WordPress provides translation
-				if ( $cpt_taxonomy == 'cat' ) {
+						// Categories (predefined): WordPress provides translation
+						if ( $cpt_taxonomy == 'cat' ) {
 
-					register_taxonomy( $cpt . '_category',
-						array( $cpt ),
-						array(
-							'hierarchical' => true,
-							'rewrite'      => array(
-							    'slug'     => $cpt_slug . '-' . RiesmaHelper::slug( __( 'Categories' ) )
-							)
-						)
-					);
+							register_taxonomy( $the_posttype . '_category',
+								array( $the_posttype ),
+								array(
+									'hierarchical'   => true,
+									'rewrite'        => array(
+									    'slug'       => $cpt_slug . '-' . RiesmaHelper::slug( __( 'Categories' ) ),
+									    'with_front' => true
+									)
+								)
+							);
+						}
+
+
+						// Tags (predefined): WordPress provides translation
+						else if ($cpt_taxonomy == 'tag' ) {
+
+							register_taxonomy( $the_posttype . '_tag',
+								array( $the_posttype ),
+								array(
+									'hierarchical'   => false,
+									'rewrite'        => array(
+									    'slug'       => $cpt_slug . '-' . RiesmaHelper::slug( __( 'Tags' ) ),
+									    'with_front' => true
+									)
+								)
+							);
+						}
+
+
+						// WordPress default post categories
+						else if ($cpt_taxonomy == 'WP_cat' ) {
+							register_taxonomy_for_object_type( 'category', $the_posttype );
+						}
+
+
+						// WordPress default post tags
+						else if ($cpt_taxonomy == 'WP_tag' ) {
+							register_taxonomy_for_object_type( 'post_tag', $the_posttype );
+						}
+
+
+						// Custom taxonomy
+						else if ( is_array($cpt_taxonomy) ) {
+
+							$the_tax          = $the_posttype . '_' . $cpt_taxonomy['taxonomy'];
+							$tax_name         = $the_posttype . '_' . $cpt_taxonomy['name'];
+							$tax_plural       = $cpt_taxonomy['plural'];
+							$tax_singular     = $cpt_taxonomy['singular'];
+							$tax_hierarchical = !empty( $cpt_taxonomy['hierarchical'] ) ? $cpt_taxonomy['hierarchical'] : true;
+							$tax_slug         = $cpt_slug . '-' . RiesmaHelper::slug( $tax_name );
+
+
+							register_taxonomy( $the_tax,
+
+								// Name of register_post_type
+								array( $the_posttype ),
+
+								array(
+
+									'labels' => array(
+										// Name of the Custom Taxonomy group
+										'name'              => __( $tax_plural ),
+										// Name of individual Custom Taxonomy item
+										'singular_name'     => __( $tax_singular ),
+										// Add New Custom Taxonomy title and button
+										'add_new_item'      => __( 'Nieuwe ' . strtolower($tax_singular) . ' toevoegen' ),
+										// Edit Custom Taxonomy page title
+										'edit_item'         => __( $tax_singular . ' bewerken' ),
+										// Update Custom Taxonomy button in Quick Edit
+										'update_item'       => __( $tax_singular . ' bijwerken' ),
+										// Search Custom Taxonomy button
+										'search_items'      => __( $tax_plural . ' zoeken' ),
+										// All Custom Taxonomy title in taxonomy's panel tab
+										'all_items'         => __( 'Alle ' . strtolower($tax_plural) ),
+										// New Custom Taxonomy title in taxonomy's panel tab
+										'new_item_name'     => __( 'Nieuwe ' . strtolower($tax_singular) . ' naam' ),
+										// Custom Taxonomy Parent in taxonomy's panel select box
+										'parent_item'       => __( $tax_singular . ' hoofd' ),
+										// Custom Taxonomy Parent title with colon
+										'parent_item_colon' => __( $tax_singular . ' hoofd:' ),
+									),
+
+									// Hierachy: true = categories, false = tags
+									'hierarchical'      => $tax_hierarchical,
+									// Available in admin panel
+									'public'            => true,
+									// Show in the admin panel
+									'show_ui'           => true,
+									// Show in the menus admin panel
+									'show_in_nav_menus' => true,
+									// Allow vars to be used for querying taxonomy
+									'query_var'         => true,
+									// Rename the URL slug
+									'rewrite'           => array(
+									    'slug'          => $tax_slug,
+									    'with_front'    => true
+									)
+								)
+							);
+						}
+					} // end foreach taxonomy
 				}
-
-
-				// Tags (predefined): WordPress provides translation
-				else if ($cpt_taxonomy == 'tag' ) {
-
-					register_taxonomy( $cpt . '_tag',
-						array( $cpt ),
-						array(
-							'hierarchical' => false,
-							'rewrite'      => array(
-							    'slug'     => $cpt_slug . '-' . RiesmaHelper::slug( __( 'Tags' ) )
-							)
-						)
-					);
-				}
-
-
-				// WordPress default post categories
-				else if ($cpt_taxonomy == 'WP_cat' ) {
-					register_taxonomy_for_object_type( 'category', $cpt );
-				}
-
-
-				// WordPress default post tags
-				else if ($cpt_taxonomy == 'WP_tag' ) {
-					register_taxonomy_for_object_type( 'post_tag', $cpt );
-				}
-
-
-				// Custom taxonomy
-				else if ( is_array($cpt_taxonomy) ) {
-
-					$taxonomy     = $cpt . '_' . $cpt_taxonomy['taxonomy'];
-					$tax_name     = $cpt . '_' . $cpt_taxonomy['name'];
-					$tax_plural   = $cpt_taxonomy['plural'];
-					$tax_singular = $cpt_taxonomy['singular'];
-
-					register_taxonomy( $taxonomy,
-
-						// Name of register_post_type
-						array( $cpt ),
-
-						array(
-
-							'labels' => array(
-								// Name of the Custom Taxonomy group
-								'name'              => __( $tax_plural ),
-								// Name of individual Custom Taxonomy item
-								'singular_name'     => __( $tax_singular ),
-								// Add New Custom Taxonomy title and button
-								'add_new_item'      => __( 'Nieuwe ' . strtolower($tax_singular) . ' toevoegen' ),
-								// Edit Custom Taxonomy page title
-								'edit_item'         => __( $tax_singular . ' bewerken' ),
-								// Update Custom Taxonomy button in Quick Edit
-								'update_item'       => __( $tax_singular . ' bijwerken' ),
-								// Search Custom Taxonomy button
-								'search_items'      => __( $tax_plural . ' zoeken' ),
-								// All Custom Taxonomy title in taxonomy's panel tab
-								'all_items'         => __( 'Alle ' . strtolower($tax_plural) ),
-								// New Custom Taxonomy title in taxonomy's panel tab
-								'new_item_name'     => __( 'Nieuwe ' . strtolower($tax_singular) . ' naam' ),
-								// Custom Taxonomy Parent in taxonomy's panel select box
-								'parent_item'       => __( $tax_singular . ' hoofd' ),
-								// Custom Taxonomy Parent title with colon
-								'parent_item_colon' => __( $tax_singular . ' hoofd:' ),
-							),
-
-							// Hierachy: true = categories, false = tags
-							'hierarchical'      => true,
-							// Available in admin panel
-							'public'            => true,
-							// Show in the admin panel
-							'show_ui'           => true,
-							// Show in the menus admin panel
-							'show_in_nav_menus' => true,
-							// Allow vars to be used for querying taxonomy
-							'query_var'         => true,
-							// Rename the URL slug
-							'rewrite'           => array(
-							    'slug'          => $cpt_slug . '-' . RiesmaHelper::slug( $tax_plural )
-							)
-						)
-					);
-				}
-
-			}
+			} // end foreach cpts
 		}
 	}
 
@@ -344,7 +357,7 @@ class RiesmaSetup {
 
 	/**
 	 * Order admin menu items
-	*/
+	 */
 
 	function custom_menu_order( $menu_order ) {
 
@@ -382,7 +395,7 @@ class RiesmaSetup {
 	/**
 	 * Hide admin menu items
 	 * Order of items is as they are after running custom_menu_order()
-	*/
+	 */
 
 	function hide_admin_menu_items() {
 
@@ -407,28 +420,34 @@ class RiesmaSetup {
 			remove_menu_page( 'edit-comments.php' );
 		}
 
+
 		// When not logged in as admin
 		if ( ! current_user_can( 'administrator' ) ) {
 			remove_menu_page( 'edit.php' );
 			remove_menu_page( 'edit-comments.php' );
 			remove_menu_page( 'tools.php' );
 		}
-
 	}
+
 }
 
 
 
 class RiesmaHelper {
 
-	// Create clean slug
-	// > Improve this! __() returns &235; instead of ë
+	/**
+	 * Create clean slug
+	 * !! Improve this: __() returns &235; instead of ë
+	 */
 	function slug( $slug ) {
 		return str_replace( array(' ', '"'), array('-', ''), iconv( 'UTF-8', 'ASCII//TRANSLIT//IGNORE', strtolower($slug) ) );
 	}
 
-	// Check if icon file exists, else return default icon (Posts)
-	// Path based on Bones theme
+
+	/**
+	 * Check if icon file exists, else return default icon (Posts)
+	 * Path based on Bones theme
+	 */
 	function icon( $cpt ) {
 		$file = get_stylesheet_directory_uri() . '/library/img/' . $cpt . '-icon.png';
 		$icon = file_exists($file) ? $file : false;
