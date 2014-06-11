@@ -1,4 +1,4 @@
-WordPress Base Setup
+WordPress Setup Plugin
 ========================
 
 Adding some basic functions and settings to WordPress.
