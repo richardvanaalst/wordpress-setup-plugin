@@ -53,13 +53,13 @@ custom post type     http://www.smashingmagazine.com/2012/11/08/complete-guide-c
 
 
 
-class RiesmaBaseSetup {
+class RiesmaSetup {
 
 	/**
 	 * Class constructor
 	*/
 
-	function RiesmaBaseSetup() {
+	function RiesmaSetup() {
 
 		// Add custom post type(s)
 		add_action( 'init', array( &$this, 'add_cpt' ) );
@@ -428,7 +428,7 @@ class RiesmaBaseSetup {
 
 
 
-class RiesmaBaseHelper {
+class RiesmaHelper {
 
 	// Create clean slug
 	// > Improve this! __() returns &235; instead of ë
@@ -449,7 +449,7 @@ class RiesmaBaseHelper {
 
 
 // Instantiate the setup
-$RiesmaBaseSetup = new RiesmaBaseSetup();
+$RiesmaSetup = new RiesmaSetup();
 
 
 
