@@ -34,10 +34,12 @@ class RiesmaSetup {
 	/**
 	 * Construct all settings
 	*/
-	function RiesmaSetup() {
+	function __construct() {
 
 		// Add custom post type(s) and taxonomy
-		add_action( 'init', array( $this, 'add_cpt' ), 10 );
+		$this->add_cpt();
+		// add_action( 'init', array( $this, 'add_cpt' ) );
+		add_action( 'init', array( $this, 'flush_rewrite_rules' ) );
 
 		// Order admin menu items
 		add_filter( 'custom_menu_order', array( $this, 'custom_menu_order' ) );
@@ -45,9 +47,6 @@ class RiesmaSetup {
 
 		// Hide admin menu items
 		add_action( 'admin_menu', array( $this, 'hide_admin_menu_items' ) );
-
-		// Flush rewrite rules after enabling/disabling plugin
-		register_activation_hook( __FILE__, array( $this, 'activate_plugin' ) );
 	}
 
 
@@ -69,8 +68,19 @@ class RiesmaSetup {
 
 			// Flush permalink rewrite rules when developing
 			if ( WP_DEBUG ) {
-				flush_rewrite_rules(false);
+				// flush_rewrite_rules(false);
 			}
+		}
+	}
+
+
+
+	/**
+	 * Flush the permalink rewrite rules
+	 */
+	function flush_rewrite_rules() {
+		if ( WP_DEBUG ) {
+			flush_rewrite_rules(false);
 		}
 	}
 
@@ -146,47 +156,6 @@ class RiesmaSetup {
 			remove_menu_page( 'edit-comments.php' );
 			remove_menu_page( 'tools.php' );
 		}
-	}
-
-
-
-
-
-
-
-
-
-	/** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-	 * Helper functions
-	 *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** */
-
-
-	/**
-	 * Activation hooks
-	 * Flush the permalink rewrite rules
-	 */
-	static function activate_plugin() {
-		flush_rewrite_rules();
-	}
-
-
-	/**
-	 * Create clean slug
-	 * !! Improve this: __() returns &235; instead of ë
-	 */
-	static function slug( $slug ) {
-		return apply_filters( 'riesma_slug', str_replace( array(' ', '"'), array('-', ''), iconv( 'UTF-8', 'ASCII//TRANSLIT//IGNORE', strtolower($slug) ) ) );
-	}
-
-
-	/**
-	 * Check if icon file exists, else return default icon (Posts)
-	 * Path based on Bones theme
-	 */
-	static function icon( $cpt ) {
-		$file = get_stylesheet_directory_uri() . '/library/img/' . $cpt . '-icon.png';
-		$icon = file_exists($file) ? $file : false;
-		return $icon;
 	}
 
 

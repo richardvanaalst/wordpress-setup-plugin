@@ -41,14 +41,13 @@ class RiesmaPostType {
 		$this->singular     = $cpt['singular'];
 		$this->hierarchical = !empty( $cpt['hierarchical'] ) ? $cpt['hierarchical'] : false;
 		$this->taxonomies   = !empty( $cpt['taxonomies'] ) ? $cpt['taxonomies'] : false;
-		$this->slug         = RiesmaSetup::slug( $this->name );
-		$this->icon         = RiesmaSetup::icon( $this->posttype );
+		$this->slug         = $this->slug( $this->name );
+		$this->icon         = $this->icon( $this->posttype );
 
 
 		// Add the post type, if it does not exist yet
 		if( !post_type_exists( $this->posttype ) ) {
-			// Priority 11, so it will be executed after RiesmaSetup
-			add_action( 'init', array( $this, 'register_post_type' ), 11 );
+			add_action( 'init', array( $this, 'register_post_type' ) );
 		}
 	}
 
@@ -56,83 +55,82 @@ class RiesmaPostType {
 
 	function register_post_type() {
 
-		/**
-		 * Add the custom post type
-		 */
-		register_post_type( $this->posttype,
+		// Post type arguments
+		$args =	array(
 
-			array(
-				'labels' => array(
-					// Name of the post type group
-					'name'               => _x( $this->name, 'post type general name' ),
-					// Name of individual post type item (default: name)
-					'singular_name'      => _x( $this->singular, 'post type singular name' ),
-					// Name of menu item (default: name)
-					// 'menu_name'          => _x( $this->name, 'admin menu' ),
-					// Name in admin bar dropdown (default: singular_name | name)
-					// 'name_admin_bar'     => _x( $this->name, 'add new on admin bar' ),
-					// All Items menu item (default: name)
-					'all_items'          => __( 'Alle ' . strtolower($this->plural) ),
-					// Add New menu item
-					'add_new'            => __( $this->singular . ' toevoegen' ),
-					// Add New display title
-					'add_new_item'       => __( $this->singular . '  toevoegen' ),
-					// Edit display title
-					'edit_item'          => __( $this->singular . ' bewerken' ),
-					// New display title
-					'new_item'           => __( $this->singular . ' toevoegen' ),
-					// View display title
-					'view_item'          => __( $this->singular . ' bekijken' ),
-					// Search post type title
-					'search_items'       => __( $this->plural . ' zoeken' ),
-					// No Entries Yet dialog
-					'not_found'          => __( 'Geen ' . strtolower($this->plural) . ' gevonden' ),
-					// Nothing in the Trash dialog
-					'not_found_in_trash' => __( 'Geen ' . strtolower($this->plural) . ' gevonden in de prullenbak' ),
-					// Parent text, hierarchical types (pages) only
-					'parent_item_colon'  => ''
-				),
+			'labels' => array(
+				// Name of the post type group
+				'name'               => _x( $this->name, 'post type general name' ),
+				// Name of individual post type item (default: name)
+				'singular_name'      => _x( $this->singular, 'post type singular name' ),
+				// Name of menu item (default: name)
+				// 'menu_name'          => _x( $this->name, 'admin menu' ),
+				// Name in admin bar dropdown (default: singular_name | name)
+				// 'name_admin_bar'     => _x( $this->name, 'add new on admin bar' ),
+				// All Items menu item (default: name)
+				'all_items'          => __( 'Alle ' . strtolower($this->plural) ),
+				// Add New menu item
+				'add_new'            => __( $this->singular . ' toevoegen' ),
+				// Add New display title
+				'add_new_item'       => __( $this->singular . '  toevoegen' ),
+				// Edit display title
+				'edit_item'          => __( $this->singular . ' bewerken' ),
+				// New display title
+				'new_item'           => __( $this->singular . ' toevoegen' ),
+				// View display title
+				'view_item'          => __( $this->singular . ' bekijken' ),
+				// Search post type title
+				'search_items'       => __( $this->plural . ' zoeken' ),
+				// No Entries Yet dialog
+				'not_found'          => __( 'Geen ' . strtolower($this->plural) . ' gevonden' ),
+				// Nothing in the Trash dialog
+				'not_found_in_trash' => __( 'Geen ' . strtolower($this->plural) . ' gevonden in de prullenbak' ),
+				// Parent text, hierarchical types (pages) only
+				'parent_item_colon'  => ''
+			),
 
-				// Custom post type description
-				'description'         => __( $this->name . ' post type.' ),
+			// Custom post type description
+			'description'         => __( $this->name . ' post type.' ),
 
-				// Show in the admin panel
-				'public'              => true,
-				// Position in admin menu (integer, default: null, below Comments)
-				// Remember that custom_menu_order will override this
-				'menu_position'       => 5,
-				// Icon of menu item
-				'menu_icon'           => $this->icon,
+			// Show in the admin panel
+			'public'              => true,
+			// Position in admin menu (integer, default: null, below Comments)
+			// Remember that custom_menu_order will override this
+			'menu_position'       => 5,
+			// Icon of menu item
+			'menu_icon'           => $this->icon,
 
-				// String used for creating 'read', 'edit' and 'delete' links
-				'capability_type'     => 'post',
+			// String used for creating 'read', 'edit' and 'delete' links
+			'capability_type'     => 'post',
 
-				// Allow parent to be set (post vs page type)
-				'hierarchical'        => $this->hierarchical,
-				// Enable options in the post editor
-				'supports'            => array(
-				    'title',
-				    'editor',
-				    'author',
-				    'thumbnail',
-				    'excerpt',
-				    'trackbacks',
-				    'custom-fields',
-				    'comments',
-				    'revisions',
-				    'page-attributes',
-				    'post-formats'
-				),
+			// Allow parent to be set (post vs page type)
+			'hierarchical'        => $this->hierarchical,
+			// Enable options in the post editor
+			'supports'            => array(
+			    'title',
+			    'editor',
+			    'author',
+			    'thumbnail',
+			    'excerpt',
+			    'trackbacks',
+			    'custom-fields',
+			    'comments',
+			    'revisions',
+			    'page-attributes',
+			    'post-formats'
+			),
 
-				// Rename the archive URL slug
-				'has_archive'         => $this->slug,
-				// Rename the URL slug
-				'rewrite'             => array(
-				    'slug'            => $this->slug,
-				    'with_front'      => true
-				)
+			// Rename the archive URL slug
+			'has_archive'         => $this->slug,
+			// Rename the URL slug
+			'rewrite'             => array(
+			    'slug'            => $this->slug,
+			    'with_front'      => true
 			)
 		);
+
+		// Register the post type
+		register_post_type( $this->posttype, $args );
 
 
 
@@ -152,7 +150,7 @@ class RiesmaPostType {
 						array(
 							'hierarchical'   => true,
 							'rewrite'        => array(
-							    'slug'       => $this->slug . '-' . RiesmaSetup::slug( __( 'Categories' ) ),
+							    'slug'       => $this->slug . '-' . $this->slug( __( 'Categories' ) ),
 							    'with_front' => true
 							)
 						)
@@ -168,7 +166,7 @@ class RiesmaPostType {
 						array(
 							'hierarchical'   => false,
 							'rewrite'        => array(
-							    'slug'       => $this->slug . '-' . RiesmaSetup::slug( __( 'Tags' ) ),
+							    'slug'       => $this->slug . '-' . $this->slug( __( 'Tags' ) ),
 							    'with_front' => true
 							)
 						)
@@ -196,7 +194,7 @@ class RiesmaPostType {
 					$tax_plural       = $this->taxonomy['plural'];
 					$tax_singular     = $this->taxonomy['singular'];
 					$tax_hierarchical = !empty( $this->taxonomy['hierarchical'] ) ? $this->taxonomy['hierarchical'] : true;
-					$tax_slug         = $this->slug . '-' . RiesmaSetup::slug( $tax_name );
+					$tax_slug         = $this->slug . '-' . $this->slug( $tax_name );
 
 
 					register_taxonomy( $the_tax,
@@ -249,6 +247,38 @@ class RiesmaPostType {
 				}
 			} // end foreach taxonomy
 		}
+	}
+
+
+
+
+
+
+
+
+
+	/** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	 * Helper functions
+	 *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** */
+
+
+	/**
+	 * Create clean slug
+	 * !! Improve this: __() returns &235; instead of ë
+	 */
+	static function slug( $slug ) {
+		return apply_filters( 'riesma_slug', str_replace( array(' ', '"'), array('-', ''), iconv( 'UTF-8', 'ASCII//TRANSLIT//IGNORE', strtolower($slug) ) ) );
+	}
+
+
+	/**
+	 * Check if icon file exists, else return default icon (Posts)
+	 * Path based on Bones theme
+	 */
+	static function icon( $cpt ) {
+		$file = get_stylesheet_directory_uri() . '/library/img/' . $cpt . '-icon.png';
+		$icon = file_exists($file) ? $file : false;
+		return $icon;
 	}
 
 
