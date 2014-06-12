@@ -80,16 +80,7 @@ $cpts = array();
 	'plural'       => 'Producten',
 	'singular'     => 'Product',
 	'hierarchical' => false,
-	'taxonomies'   => array(
-		'cat',
-		'tag',
-		array(
-			'taxonomy' => 'collections',
-			'name'     => 'Collecties',
-			'plural'   => 'Collecties',
-			'singular' => 'Collectie'
-		)
-	)
+	'taxonomies'   => array('cat', 'tag')
 );*/
 
 
