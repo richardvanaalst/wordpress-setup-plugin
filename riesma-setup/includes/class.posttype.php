@@ -1,6 +1,6 @@
 <?php
 /**
- * Riesma Custom Post Type
+ * Riesma Post Type
  *
  * Add custom post type, including (custom) taxonomies,
  * by adding to the cpts array located in list.posttype.php.
@@ -8,11 +8,11 @@
 
 
 
-if ( !class_exists( 'RiesmaCustomPostType' ) ) {
+if ( !class_exists( 'RiesmaPostType' ) ) {
 
 
 
-class RiesmaCustomPostType {
+class RiesmaPostType {
 
 
 
@@ -45,7 +45,7 @@ class RiesmaCustomPostType {
 		$this->icon         = RiesmaSetup::icon( $this->posttype );
 
 
-		// Add the custom post type, if it does not exist yet
+		// Add the post type, if it does not exist yet
 		if( !post_type_exists( $this->posttype ) ) {
 			// Priority 11, so it will be executed after RiesmaSetup
 			add_action( 'init', array( $this, 'register_post_type' ), 11 );
@@ -63,9 +63,9 @@ class RiesmaCustomPostType {
 
 			array(
 				'labels' => array(
-					// Name of the custom post type group
+					// Name of the post type group
 					'name'               => _x( $this->name, 'post type general name' ),
-					// Name of individual custom post type item (default: name)
+					// Name of individual post type item (default: name)
 					'singular_name'      => _x( $this->singular, 'post type singular name' ),
 					// Name of menu item (default: name)
 					// 'menu_name'          => _x( $this->name, 'admin menu' ),
@@ -83,7 +83,7 @@ class RiesmaCustomPostType {
 					'new_item'           => __( $this->singular . ' toevoegen' ),
 					// View display title
 					'view_item'          => __( $this->singular . ' bekijken' ),
-					// Search custom post type title
+					// Search post type title
 					'search_items'       => __( $this->plural . ' zoeken' ),
 					// No Entries Yet dialog
 					'not_found'          => __( 'Geen ' . strtolower($this->plural) . ' gevonden' ),
@@ -207,25 +207,25 @@ class RiesmaCustomPostType {
 						array(
 
 							'labels' => array(
-								// Name of the Custom Taxonomy group
+								// Name of the taxonomy group
 								'name'              => __( $tax_plural ),
-								// Name of individual Custom Taxonomy item
+								// Name of individual taxonomy item
 								'singular_name'     => __( $tax_singular ),
-								// Add New Custom Taxonomy title and button
+								// Add New taxonomy title and button
 								'add_new_item'      => __( 'Nieuwe ' . strtolower($tax_singular) . ' toevoegen' ),
-								// Edit Custom Taxonomy page title
+								// Edit taxonomy page title
 								'edit_item'         => __( $tax_singular . ' bewerken' ),
-								// Update Custom Taxonomy button in Quick Edit
+								// Update taxonomy button in Quick Edit
 								'update_item'       => __( $tax_singular . ' bijwerken' ),
-								// Search Custom Taxonomy button
+								// Search taxonomy button
 								'search_items'      => __( $tax_plural . ' zoeken' ),
-								// All Custom Taxonomy title in taxonomy's panel tab
+								// All taxonomy title in taxonomy's panel tab
 								'all_items'         => __( 'Alle ' . strtolower($tax_plural) ),
-								// New Custom Taxonomy title in taxonomy's panel tab
+								// New taxonomy title in taxonomy's panel tab
 								'new_item_name'     => __( 'Nieuwe ' . strtolower($tax_singular) . ' naam' ),
-								// Custom Taxonomy Parent in taxonomy's panel select box
+								// taxonomy Parent in taxonomy's panel select box
 								'parent_item'       => __( $tax_singular . ' hoofd' ),
-								// Custom Taxonomy Parent title with colon
+								// taxonomy Parent title with colon
 								'parent_item_colon' => __( $tax_singular . ' hoofd:' ),
 							),
 

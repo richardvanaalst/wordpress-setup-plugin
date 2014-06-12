@@ -64,7 +64,7 @@ class RiesmaSetup {
 
 			foreach ( $cpts as $cpt ) {
 				// $$cpt['posttype'] = new RiesmaCustomPostType( $cpt );
-				$rcpt = new RiesmaCustomPostType( $cpt );
+				$rcpt = new RiesmaPostType( $cpt );
 			}
 
 			// Flush permalink rewrite rules when developing
