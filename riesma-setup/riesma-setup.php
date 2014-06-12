@@ -37,7 +37,7 @@ Todo
 4.   Set menu order dynamically for custom post types
 5.   Rename the URL slug: find better way to swap characters and character encoding!
 6.   Add custom taxonomy
-7.   Auto-refresh permalinks after adding custom post type
+7.   Flush rewrite after enabling plugin and adding cpt
 8.   Add translation: _x( 'text', 'context' ) => 'Nieuw' vs 'Nieuwe'?
 
 More information
@@ -289,6 +289,9 @@ class RiesmaSetup {
 					} // end foreach taxonomy
 				}
 			} // end foreach cpts
+
+			// Flush permalink rewrite rules
+			flush_rewrite_rules(false);
 		}
 	}
 
