@@ -6,17 +6,16 @@
  * by adding to the cpts array located in posttypes.php.
  */
 
+if( ! defined( 'ABSPATH' ) ) exit;
 
 
-if ( !class_exists( 'RiesmaPostType' ) ) {
-
+if ( !class_exists( 'RiesmaPostType' ) ) :
 
 
 class RiesmaPostType {
 
 
-
-	var $posttype;
+	var $post_type;
 	var $name;
 	var $plural;
 	var $singular;
@@ -26,34 +25,31 @@ class RiesmaPostType {
 	var $icon;
 
 
-
 	/**
 	 * Custom post type
 	 *
 	 * @param   array   $cpt
 	 */
-	// function __construct( $posttype, $name, $args = array(), $labels = array() ) {
 	function __construct( $cpt ) {
 
-		$this->posttype     = $cpt['posttype'];
+		$this->post_type    = $cpt['post_type'];
 		$this->name         = $this->titelify($cpt['name']);
 		$this->plural       = $this->titelify($cpt['plural']);
 		$this->singular     = $this->titelify($cpt['singular']);
 		$this->hierarchical = !empty( $cpt['hierarchical'] ) ? $cpt['hierarchical'] : false;
 		$this->taxonomies   = !empty( $cpt['taxonomies'] ) ? $cpt['taxonomies'] : false;
 		$this->slug         = $this->slugify( $this->name );
-		$this->icon         = $this->iconify( $this->posttype );
+		$this->icon         = $this->iconify( $this->post_type );
 
 
 		// Add the post type, if it does not exist yet
-		if( !post_type_exists( $this->posttype ) ) {
+		if( !post_type_exists( $this->post_type ) ) {
 			add_action( 'init', array( $this, 'register_post_type' ) );
 		}
 	}
 
 
-
-	function register_post_type() {
+	public function register_post_type() {
 
 		// Post type arguments
 		$args =	array(
@@ -68,7 +64,7 @@ class RiesmaPostType {
 				// Name in admin bar dropdown (default: singular_name | name)
 				// 'name_admin_bar'     => _x( $this->name, 'add new on admin bar' ),
 				// All Items menu item (default: name)
-				'all_items'          => __( 'Alle ' . textify($this->plural) ),
+				'all_items'          => __( 'Alle ' . $this->textify($this->plural) ),
 				// Add New menu item
 				'add_new'            => __( $this->singular . ' toevoegen' ),
 				// Add New display title
@@ -82,9 +78,9 @@ class RiesmaPostType {
 				// Search post type title
 				'search_items'       => __( $this->singular . ' zoeken' ),
 				// No Entries Yet dialog
-				'not_found'          => __( 'Geen ' . textify($this->plural) . ' gevonden' ),
+				'not_found'          => __( 'Geen ' . $this->textify($this->plural) . ' gevonden' ),
 				// Nothing in the Trash dialog
-				'not_found_in_trash' => __( 'Geen ' . textify($this->plural) . ' gevonden in de prullenbak' ),
+				'not_found_in_trash' => __( 'Geen ' . $this->textify($this->plural) . ' gevonden in de prullenbak' ),
 				// Parent text, hierarchical types (pages) only
 				'parent_item_colon'  => ''
 			),
@@ -130,14 +126,12 @@ class RiesmaPostType {
 		);
 
 		// Register the post type
-		register_post_type( $this->posttype, $args );
-
+		register_post_type( $this->post_type, $args );
 
 
 		/**
 		 * Add custom taxonomy
 		 */
-
 		if ( !empty( $this->taxonomies ) && is_array( $this->taxonomies ) ) {
 
 			foreach ( $this->taxonomies as $this->taxonomy ) {
@@ -145,8 +139,8 @@ class RiesmaPostType {
 				// Categories (predefined): WordPress provides translation
 				if ( $this->taxonomy == 'cat' ) {
 
-					register_taxonomy( $this->posttype . '_category',
-						array( $this->posttype ),
+					register_taxonomy( $this->post_type . '_category',
+						array( $this->post_type ),
 						array(
 							'hierarchical'   => true,
 							'rewrite'        => array(
@@ -161,8 +155,8 @@ class RiesmaPostType {
 				// Tags (predefined): WordPress provides translation
 				else if ($this->taxonomy == 'tag' ) {
 
-					register_taxonomy( $this->posttype . '_tag',
-						array( $this->posttype ),
+					register_taxonomy( $this->post_type . '_tag',
+						array( $this->post_type ),
 						array(
 							'hierarchical'   => false,
 							'rewrite'        => array(
@@ -176,21 +170,21 @@ class RiesmaPostType {
 
 				// WordPress default post categories
 				else if ($this->taxonomy == 'WP_cat' ) {
-					register_taxonomy_for_object_type( 'category', $this->posttype );
+					register_taxonomy_for_object_type( 'category', $this->post_type );
 				}
 
 
 				// WordPress default post tags
 				else if ($this->taxonomy == 'WP_tag' ) {
-					register_taxonomy_for_object_type( 'post_tag', $this->posttype );
+					register_taxonomy_for_object_type( 'post_tag', $this->post_type );
 				}
 
 
 				// Custom taxonomy
 				else if ( is_array($this->taxonomy) ) {
 
-					$the_tax          = $this->posttype . '_' . $this->taxonomy['taxonomy'];
-					$tax_name         = $this->posttype . '_' . $this->taxonomy['name'];
+					$the_tax          = $this->post_type . '_' . $this->taxonomy['taxonomy'];
+					$tax_name         = $this->post_type . '_' . $this->taxonomy['name'];
 					$tax_plural       = $this->taxonomy['plural'];
 					$tax_singular     = $this->taxonomy['singular'];
 					$tax_hierarchical = !empty( $this->taxonomy['hierarchical'] ) ? $this->taxonomy['hierarchical'] : true;
@@ -200,7 +194,7 @@ class RiesmaPostType {
 					register_taxonomy( $the_tax,
 
 						// Name of register_post_type
-						array( $this->posttype ),
+						array( $this->post_type ),
 
 						array(
 
@@ -210,7 +204,7 @@ class RiesmaPostType {
 								// Name of individual taxonomy item
 								'singular_name'     => __( $tax_singular ),
 								// Add New taxonomy title and button
-								'add_new_item'      => __( 'Nieuwe ' . textify($tax_singular) . ' toevoegen' ),
+								'add_new_item'      => __( 'Nieuwe ' . $this->textify($tax_singular) . ' toevoegen' ),
 								// Edit taxonomy page title
 								'edit_item'         => __( $tax_singular . ' bewerken' ),
 								// Update taxonomy button in Quick Edit
@@ -218,9 +212,9 @@ class RiesmaPostType {
 								// Search taxonomy button
 								'search_items'      => __( $tax_plural . ' zoeken' ),
 								// All taxonomy title in taxonomy's panel tab
-								'all_items'         => __( 'Alle ' . textify($tax_plural) ),
+								'all_items'         => __( 'Alle ' . $this->textify($tax_plural) ),
 								// New taxonomy title in taxonomy's panel tab
-								'new_item_name'     => __( 'Nieuwe ' . textify($tax_singular) . ' naam' ),
+								'new_item_name'     => __( 'Nieuwe ' . $this->textify($tax_singular) . ' naam' ),
 								// taxonomy Parent in taxonomy's panel select box
 								'parent_item'       => __( $tax_singular . ' hoofd' ),
 								// taxonomy Parent title with colon
@@ -248,11 +242,6 @@ class RiesmaPostType {
 			} // end foreach taxonomy
 		}
 	}
-
-
-
-
-
 
 
 
@@ -312,13 +301,10 @@ class RiesmaPostType {
 	}
 
 
-
 } // class
 
 
-
-} // if (!class_exists)
-
+endif; // if (!class_exists)
 
 
 ?>

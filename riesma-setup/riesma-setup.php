@@ -22,9 +22,12 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+if( ! defined( 'ABSPATH' ) ) exit;
+
 
 require_once( 'includes/class.setup.php' );
 require_once( 'includes/class.posttype.php' );
+
 
 // Instantiate the setup
 $RiesmaSetup = new RiesmaSetup();

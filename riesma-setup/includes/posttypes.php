@@ -8,7 +8,7 @@
  *
  * @param   array    $cpts
  *
- * @param   string   $posttype
+ * @param   string   $post_type
  * @param   string   $name
  * @param   string   $plural
  * @param   string   $singular
@@ -22,15 +22,15 @@
  * WP_tag   WordPress default tags
  */
 
+if( ! defined( 'ABSPATH' ) ) exit;
 
 
 $cpts = array();
 
 
-
 // Items
 /*$cpts[] = array(
-	'posttype'     => 'items',
+	'post_type'    => 'items',
 	'name'         => 'Items',
 	'plural'       => 'Items',
 	'singular'     => 'Item',
@@ -39,10 +39,9 @@ $cpts = array();
 );*/
 
 
-
 // Portfolio
 /*$cpts[] = array(
-	'posttype'     => 'portfolio',
+	'post_type'    => 'portfolio',
 	'name'         => 'Portfolio',
 	'plural'       => 'Portfolio cases',
 	'singular'     => 'Portfolio case',
@@ -60,10 +59,9 @@ $cpts = array();
 );*/
 
 
-
 // Clients
 /*$cpts[] = array(
-	'posttype'     => 'clients',
+	'post_type'    => 'clients',
 	'name'         => 'Cliënten',
 	'plural'       => 'Cliënten',
 	'singular'     => 'Cliënt',
@@ -72,17 +70,15 @@ $cpts = array();
 );*/
 
 
-
 // Products
 /*$cpts[] = array(
-	'posttype'     => 'products',
+	'post_type'    => 'products',
 	'name'         => 'Producten',
 	'plural'       => 'Producten',
 	'singular'     => 'Product',
 	'hierarchical' => false,
 	'taxonomies'   => array('cat', 'tag')
 );*/
-
 
 
 ?>

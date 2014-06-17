@@ -6,39 +6,40 @@
  * 1.   Create easier way to edit the settings instead of editing this php file?
  *   a. Via XML, or
  *   b. Admin pages
- * 2.   Set default screen options.
- * 3.   Add Custom Post Type archive pages to menu (still needed?)
+ * 2.   Custom meta boxes
+ * 3.   Set default screen options.
+ * 4.   Add Custom Post Type archive pages to menu (still needed?)
  *      (http://wordpress.org/plugins/add-custom-post-types-archive-to-nav-menus/)
- * 4.   Set menu order dynamically for custom post types
- * 5.   Rename the URL slug: find better way to swap characters and character encoding!
- * 6.   Add custom taxonomy class
- * 7.   Add translation: _x( 'text', 'context' ) => 'Nieuw' vs 'Nieuwe'?
+ * 5.   Set menu order dynamically for custom post types
+ * 6.   Rename the URL slug: find better way to swap characters and character encoding!
+ * 7.   Add custom taxonomy class
+ * 8.   Add translation: _x( 'text', 'context' ) => 'Nieuw' vs 'Nieuwe'?
  *
  * More information
  * register_post_type   http://codex.wordpress.org/Function_Reference/register_post_type
  * register_taxonomy    http://codex.wordpress.org/Function_Reference/register_taxonomy
  * custom meta boxes    https://github.com/jaredatch/Custom-Metaboxes-and-Fields-for-WordPress
  * custom post type     http://www.smashingmagazine.com/2012/11/08/complete-guide-custom-post-types/
-*/
+ */
+
+if( ! defined( 'ABSPATH' ) ) exit;
 
 
-
-if ( !class_exists( 'RiesmaSetup' ) ) {
-
+if ( !class_exists( 'RiesmaSetup' ) ) :
 
 
 class RiesmaSetup {
 
 
-
 	/**
 	 * Construct all settings
-	*/
+	 */
 	function __construct() {
 
-		// Add custom post type(s) and taxonomy
-		$this->add_cpt();
-		// add_action( 'init', array( $this, 'add_cpt' ) );
+		// Add custom post types and taxonomy
+		$this->add_post_types();
+
+		// Flush rewrite rules, so added post type permalinks work
 		add_action( 'init', array( $this, 'flush_rewrite_rules' ) );
 
 		// Order admin menu items
@@ -50,11 +51,10 @@ class RiesmaSetup {
 	}
 
 
-
 	/**
 	 * Add custom post type, including (custom) taxonomies
-	*/
-	function add_cpt() {
+	 */
+	public function add_post_types() {
 
 		// Load the list with custom post types
 		require_once( 'posttypes.php' );
@@ -62,34 +62,33 @@ class RiesmaSetup {
 		if ( !empty( $cpts ) && is_array( $cpts ) ) {
 
 			foreach ( $cpts as $cpt ) {
-				// $$cpt['posttype'] = new RiesmaCustomPostType( $cpt );
+				// $$cpt['post_type'] = new RiesmaPostType( $cpt );
 				$rcpt = new RiesmaPostType( $cpt );
 			}
 
+			/* function not yet available on plugins_loaded: solution?
 			// Flush permalink rewrite rules when developing
 			if ( WP_DEBUG ) {
-				// flush_rewrite_rules(false);
-			}
+				flush_rewrite_rules(false);
+			}*/
 		}
 	}
-
 
 
 	/**
 	 * Flush the permalink rewrite rules
 	 */
-	function flush_rewrite_rules() {
+	public function flush_rewrite_rules() {
 		if ( WP_DEBUG ) {
 			flush_rewrite_rules(false);
 		}
 	}
 
 
-
 	/**
 	 * Order admin menu items
 	 */
-	function custom_menu_order( $menu_order ) {
+	public function custom_menu_order( $menu_order ) {
 
 		if ( !$menu_order ) return true;
 
@@ -121,12 +120,11 @@ class RiesmaSetup {
 	}
 
 
-
 	/**
 	 * Hide admin menu items
 	 * Order of items is as they are after running custom_menu_order()
 	 */
-	function hide_admin_menu_items() {
+	public function hide_admin_menu_items() {
 
 		// All items for reference:
 		// remove_menu_page( 'index.php' );                 // Dashboard
@@ -159,13 +157,10 @@ class RiesmaSetup {
 	}
 
 
-
 } // class
 
 
-
-} // if (!class_exists)
-
+endif; // if (!class_exists)
 
 
 ?>
