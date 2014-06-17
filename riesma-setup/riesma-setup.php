@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name:   Riesma Setup
-Plugin URI:    http://riesma.nl/
+Plugin URI:    https://github.com/riesma/wordpress-setup-plugin
 Description:   Adding custom post types, sorting and hiding admin menu items.
 Version:       1.1.1
 Author:        Richard van Aalst
