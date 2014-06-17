@@ -3,7 +3,7 @@
  * Riesma Post Type
  *
  * Add custom post type, including (custom) taxonomies,
- * by adding to the cpts array located in list.posttype.php.
+ * by adding to the cpts array located in posttypes.php.
  */
 
 
@@ -30,7 +30,7 @@ class RiesmaPostType {
 	/**
 	 * Custom post type
 	 *
-	 * @param   array    $cpt
+	 * @param   array   $cpt
 	 */
 	// function __construct( $posttype, $name, $args = array(), $labels = array() ) {
 	function __construct( $cpt ) {
@@ -41,8 +41,8 @@ class RiesmaPostType {
 		$this->singular     = $cpt['singular'];
 		$this->hierarchical = !empty( $cpt['hierarchical'] ) ? $cpt['hierarchical'] : false;
 		$this->taxonomies   = !empty( $cpt['taxonomies'] ) ? $cpt['taxonomies'] : false;
-		$this->slug         = $this->slug( $this->name );
-		$this->icon         = $this->icon( $this->posttype );
+		$this->slug         = $this->slugify( $this->name );
+		$this->icon         = $this->iconify( $this->posttype );
 
 
 		// Add the post type, if it does not exist yet
@@ -150,7 +150,7 @@ class RiesmaPostType {
 						array(
 							'hierarchical'   => true,
 							'rewrite'        => array(
-							    'slug'       => $this->slug . '-' . $this->slug( __( 'Categories' ) ),
+							    'slug'       => $this->slug . '-' . $this->slugify( __( 'Categories' ) ),
 							    'with_front' => true
 							)
 						)
@@ -166,7 +166,7 @@ class RiesmaPostType {
 						array(
 							'hierarchical'   => false,
 							'rewrite'        => array(
-							    'slug'       => $this->slug . '-' . $this->slug( __( 'Tags' ) ),
+							    'slug'       => $this->slug . '-' . $this->slugify( __( 'Tags' ) ),
 							    'with_front' => true
 							)
 						)
@@ -194,7 +194,7 @@ class RiesmaPostType {
 					$tax_plural       = $this->taxonomy['plural'];
 					$tax_singular     = $this->taxonomy['singular'];
 					$tax_hierarchical = !empty( $this->taxonomy['hierarchical'] ) ? $this->taxonomy['hierarchical'] : true;
-					$tax_slug         = $this->slug . '-' . $this->slug( $tax_name );
+					$tax_slug         = $this->slug . '-' . $this->slugify( $tax_name );
 
 
 					register_taxonomy( $the_tax,
@@ -265,19 +265,27 @@ class RiesmaPostType {
 	/**
 	 * Create clean slug
 	 * !! Improve this: __() returns &235; instead of ë
+	 *
+	 * @param    string   $string
+	 * @return   string
 	 */
-	static function slug( $slug ) {
-		return apply_filters( 'riesma_slug', str_replace( array(' ', '"'), array('-', ''), iconv( 'UTF-8', 'ASCII//TRANSLIT//IGNORE', strtolower($slug) ) ) );
+	static function slugify( $string ) {
+		return apply_filters( 'riesma_slugify', str_replace( array(' ', '"'), array('-', ''), iconv( 'UTF-8', 'ASCII//TRANSLIT//IGNORE', strtolower( $string ) ) ) );
 	}
 
 
 	/**
 	 * Check if icon file exists, else return default icon (Posts)
-	 * Path based on Bones theme
+	 * Default path based on Bones theme
+	 *
+	 * @param    string   $string
+	 * @param    string   $path
+	 * @return   string
 	 */
-	static function icon( $cpt ) {
-		$file = get_stylesheet_directory_uri() . '/library/img/' . $cpt . '-icon.png';
-		$icon = file_exists($file) ? $file : false;
+	static function iconify( $cpt, $path = null ) {
+		$path = $path ? $path : get_stylesheet_directory_uri() . '/library/img/';
+		$file = $cpt . '-icon.png';
+		$icon = file_exists( $path . $file ) ? $file : false;
 		return $icon;
 	}
 
