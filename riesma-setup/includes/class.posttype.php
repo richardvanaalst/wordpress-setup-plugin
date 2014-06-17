@@ -36,9 +36,9 @@ class RiesmaPostType {
 	function __construct( $cpt ) {
 
 		$this->posttype     = $cpt['posttype'];
-		$this->name         = $cpt['name'];
-		$this->plural       = $cpt['plural'];
-		$this->singular     = $cpt['singular'];
+		$this->name         = $this->titelify($cpt['name']);
+		$this->plural       = $this->titelify($cpt['plural']);
+		$this->singular     = $this->titelify($cpt['singular']);
 		$this->hierarchical = !empty( $cpt['hierarchical'] ) ? $cpt['hierarchical'] : false;
 		$this->taxonomies   = !empty( $cpt['taxonomies'] ) ? $cpt['taxonomies'] : false;
 		$this->slug         = $this->slugify( $this->name );
@@ -68,7 +68,7 @@ class RiesmaPostType {
 				// Name in admin bar dropdown (default: singular_name | name)
 				// 'name_admin_bar'     => _x( $this->name, 'add new on admin bar' ),
 				// All Items menu item (default: name)
-				'all_items'          => __( 'Alle ' . strtolower($this->plural) ),
+				'all_items'          => __( 'Alle ' . textify($this->plural) ),
 				// Add New menu item
 				'add_new'            => __( $this->singular . ' toevoegen' ),
 				// Add New display title
@@ -80,11 +80,11 @@ class RiesmaPostType {
 				// View display title
 				'view_item'          => __( $this->singular . ' bekijken' ),
 				// Search post type title
-				'search_items'       => __( $this->plural . ' zoeken' ),
+				'search_items'       => __( $this->singular . ' zoeken' ),
 				// No Entries Yet dialog
-				'not_found'          => __( 'Geen ' . strtolower($this->plural) . ' gevonden' ),
+				'not_found'          => __( 'Geen ' . textify($this->plural) . ' gevonden' ),
 				// Nothing in the Trash dialog
-				'not_found_in_trash' => __( 'Geen ' . strtolower($this->plural) . ' gevonden in de prullenbak' ),
+				'not_found_in_trash' => __( 'Geen ' . textify($this->plural) . ' gevonden in de prullenbak' ),
 				// Parent text, hierarchical types (pages) only
 				'parent_item_colon'  => ''
 			),
@@ -210,7 +210,7 @@ class RiesmaPostType {
 								// Name of individual taxonomy item
 								'singular_name'     => __( $tax_singular ),
 								// Add New taxonomy title and button
-								'add_new_item'      => __( 'Nieuwe ' . strtolower($tax_singular) . ' toevoegen' ),
+								'add_new_item'      => __( 'Nieuwe ' . textify($tax_singular) . ' toevoegen' ),
 								// Edit taxonomy page title
 								'edit_item'         => __( $tax_singular . ' bewerken' ),
 								// Update taxonomy button in Quick Edit
@@ -218,9 +218,9 @@ class RiesmaPostType {
 								// Search taxonomy button
 								'search_items'      => __( $tax_plural . ' zoeken' ),
 								// All taxonomy title in taxonomy's panel tab
-								'all_items'         => __( 'Alle ' . strtolower($tax_plural) ),
+								'all_items'         => __( 'Alle ' . textify($tax_plural) ),
 								// New taxonomy title in taxonomy's panel tab
-								'new_item_name'     => __( 'Nieuwe ' . strtolower($tax_singular) . ' naam' ),
+								'new_item_name'     => __( 'Nieuwe ' . textify($tax_singular) . ' naam' ),
 								// taxonomy Parent in taxonomy's panel select box
 								'parent_item'       => __( $tax_singular . ' hoofd' ),
 								// taxonomy Parent title with colon
@@ -260,6 +260,28 @@ class RiesmaPostType {
 	/** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	 * Helper functions
 	 *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** */
+
+
+	/**
+	 * Title: first letter capitalised
+	 *
+	 * @param    string   $string
+	 * @return   string
+	 */
+	static function titelify( $string ) {
+		return apply_filters( 'riesma_titelify', ucfirst( strtolower( $string ) ) );
+	}
+
+
+	/**
+	 * Text: all lowercase
+	 *
+	 * @param    string   $string
+	 * @return   string
+	 */
+	static function textify( $string ) {
+		return apply_filters( 'riesma_textify', strtolower( $string ) );
+	}
 
 
 	/**
