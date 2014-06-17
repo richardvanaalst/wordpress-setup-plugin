@@ -16,6 +16,7 @@ class RiesmaPostType {
 
 
 	var $post_type;
+	var $labels;
 	var $name;
 	var $plural;
 	var $singular;
@@ -32,14 +33,24 @@ class RiesmaPostType {
 	 */
 	function __construct( $cpt ) {
 
-		$this->post_type    = $cpt['post_type'];
-		$this->name         = $this->titelify($cpt['name']);
-		$this->plural       = $this->titelify($cpt['plural']);
-		$this->singular     = $this->titelify($cpt['singular']);
-		$this->hierarchical = !empty( $cpt['hierarchical'] ) ? $cpt['hierarchical'] : false;
-		$this->taxonomies   = !empty( $cpt['taxonomies'] ) ? $cpt['taxonomies'] : false;
-		$this->slug         = $this->slugify( $this->name );
-		$this->icon         = $this->iconify( $this->post_type );
+		$this->post_type      = $cpt['post_type'];
+		$this->labels         = $cpt['labels'];
+
+		if ( is_array($this->labels) ) {
+			$this->name       = Riesma::titelify($this->labels['name']);
+			$this->plural     = Riesma::titelify($this->labels['plural']);
+			$this->singular   = Riesma::titelify($this->labels['singular']);
+		}
+		else {
+			$this->name       = Riesma::titelify($this->labels);
+			$this->plural     = Riesma::titelify($this->labels);
+			$this->singular   = Riesma::titelify($this->labels);
+		}
+
+		$this->hierarchical   = !empty( $cpt['hierarchical'] ) ? $cpt['hierarchical'] : false;
+		$this->taxonomies     = !empty( $cpt['taxonomies'] ) ? $cpt['taxonomies'] : false;
+		$this->slug           = Riesma::slugify( $this->name );
+		$this->icon           = Riesma::iconify( $this->post_type );
 
 
 		// Add the post type, if it does not exist yet
@@ -64,7 +75,7 @@ class RiesmaPostType {
 				// Name in admin bar dropdown (default: singular_name | name)
 				// 'name_admin_bar'     => _x( $this->name, 'add new on admin bar' ),
 				// All Items menu item (default: name)
-				'all_items'          => __( 'Alle ' . $this->textify($this->plural) ),
+				'all_items'          => __( 'Alle ' . Riesma::textify($this->plural) ),
 				// Add New menu item
 				'add_new'            => __( $this->singular . ' toevoegen' ),
 				// Add New display title
@@ -76,11 +87,11 @@ class RiesmaPostType {
 				// View display title
 				'view_item'          => __( $this->singular . ' bekijken' ),
 				// Search post type title
-				'search_items'       => __( $this->singular . ' zoeken' ),
+				'search_items'       => __( $this->plural . ' zoeken' ),
 				// No Entries Yet dialog
-				'not_found'          => __( 'Geen ' . $this->textify($this->plural) . ' gevonden' ),
+				'not_found'          => __( 'Geen ' . Riesma::textify($this->plural) . ' gevonden' ),
 				// Nothing in the Trash dialog
-				'not_found_in_trash' => __( 'Geen ' . $this->textify($this->plural) . ' gevonden in de prullenbak' ),
+				'not_found_in_trash' => __( 'Geen ' . Riesma::textify($this->plural) . ' gevonden in de prullenbak' ),
 				// Parent text, hierarchical types (pages) only
 				'parent_item_colon'  => ''
 			),
@@ -144,7 +155,7 @@ class RiesmaPostType {
 						array(
 							'hierarchical'   => true,
 							'rewrite'        => array(
-							    'slug'       => $this->slug . '-' . $this->slugify( __( 'Categories' ) ),
+							    'slug'       => $this->slug . '-' . Riesma::slugify( __( 'Categories' ) ),
 							    'with_front' => true
 							)
 						)
@@ -160,7 +171,7 @@ class RiesmaPostType {
 						array(
 							'hierarchical'   => false,
 							'rewrite'        => array(
-							    'slug'       => $this->slug . '-' . $this->slugify( __( 'Tags' ) ),
+							    'slug'       => $this->slug . '-' . Riesma::slugify( __( 'Tags' ) ),
 							    'with_front' => true
 							)
 						)
@@ -188,7 +199,7 @@ class RiesmaPostType {
 					$tax_plural       = $this->taxonomy['plural'];
 					$tax_singular     = $this->taxonomy['singular'];
 					$tax_hierarchical = !empty( $this->taxonomy['hierarchical'] ) ? $this->taxonomy['hierarchical'] : true;
-					$tax_slug         = $this->slug . '-' . $this->slugify( $tax_name );
+					$tax_slug         = $this->slug . '-' . Riesma::slugify( $tax_name );
 
 
 					register_taxonomy( $the_tax,
@@ -204,7 +215,7 @@ class RiesmaPostType {
 								// Name of individual taxonomy item
 								'singular_name'     => __( $tax_singular ),
 								// Add New taxonomy title and button
-								'add_new_item'      => __( 'Nieuwe ' . $this->textify($tax_singular) . ' toevoegen' ),
+								'add_new_item'      => __( 'Nieuwe ' . Riesma::textify($tax_singular) . ' toevoegen' ),
 								// Edit taxonomy page title
 								'edit_item'         => __( $tax_singular . ' bewerken' ),
 								// Update taxonomy button in Quick Edit
@@ -212,9 +223,9 @@ class RiesmaPostType {
 								// Search taxonomy button
 								'search_items'      => __( $tax_plural . ' zoeken' ),
 								// All taxonomy title in taxonomy's panel tab
-								'all_items'         => __( 'Alle ' . $this->textify($tax_plural) ),
+								'all_items'         => __( 'Alle ' . Riesma::textify($tax_plural) ),
 								// New taxonomy title in taxonomy's panel tab
-								'new_item_name'     => __( 'Nieuwe ' . $this->textify($tax_singular) . ' naam' ),
+								'new_item_name'     => __( 'Nieuwe ' . Riesma::textify($tax_singular) . ' naam' ),
 								// taxonomy Parent in taxonomy's panel select box
 								'parent_item'       => __( $tax_singular . ' hoofd' ),
 								// taxonomy Parent title with colon
@@ -241,63 +252,6 @@ class RiesmaPostType {
 				}
 			} // end foreach taxonomy
 		}
-	}
-
-
-
-
-	/** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-	 * Helper functions
-	 *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** */
-
-
-	/**
-	 * Title: first letter capitalised
-	 *
-	 * @param    string   $string
-	 * @return   string
-	 */
-	static function titelify( $string ) {
-		return apply_filters( 'riesma_titelify', ucfirst( strtolower( $string ) ) );
-	}
-
-
-	/**
-	 * Text: all lowercase
-	 *
-	 * @param    string   $string
-	 * @return   string
-	 */
-	static function textify( $string ) {
-		return apply_filters( 'riesma_textify', strtolower( $string ) );
-	}
-
-
-	/**
-	 * Create clean slug
-	 * !! Improve this: __() returns &235; instead of ë
-	 *
-	 * @param    string   $string
-	 * @return   string
-	 */
-	static function slugify( $string ) {
-		return apply_filters( 'riesma_slugify', str_replace( array(' ', '"'), array('-', ''), iconv( 'UTF-8', 'ASCII//TRANSLIT//IGNORE', strtolower( $string ) ) ) );
-	}
-
-
-	/**
-	 * Check if icon file exists, else return default icon (Posts)
-	 * Default path based on Bones theme
-	 *
-	 * @param    string   $string
-	 * @param    string   $path
-	 * @return   string
-	 */
-	static function iconify( $cpt, $path = null ) {
-		$path = $path ? $path : get_stylesheet_directory_uri() . '/library/img/';
-		$file = $cpt . '-icon.png';
-		$icon = file_exists( $path . $file ) ? $file : false;
-		return $icon;
 	}
 
 

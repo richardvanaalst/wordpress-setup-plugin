@@ -6,14 +6,18 @@
  * by adding to the cpts array.
  * See (dutch) usage examples below.
  *
- * @param   array    $cpts
- *
- * @param   string   $post_type
- * @param   string   $name
- * @param   string   $plural
- * @param   string   $singular
- * @param   bool     $hierarchical   false = post, true = page
- * @param   array    $taxonomies
+ * @param   array          $cpts
+ * @param   string         post_type
+ * @param   string|array   labels
+ * @param   string         - name
+ * @param   string         - plural
+ * @param   string         - singular
+ * @param   bool           hierarchical   false = post, true = page
+ * @param   array          taxonomies
+ * @param   string|array   - taxonomy
+ * @param   string         - name
+ * @param   string         - plural
+ * @param   string         - singular
  *
  * $taxonomies has some optional predefined options:
  * cat      categories
@@ -30,10 +34,12 @@ $cpts = array();
 
 // Items
 /*$cpts[] = array(
-	'post_type'    => 'items',
-	'name'         => 'Items',
-	'plural'       => 'Items',
-	'singular'     => 'Item',
+	'post_type'     => 'items',
+	'labels'       => array(
+		'name'         => 'Items',
+		'plural'       => 'Items',
+		'singular'     => 'Item'
+	),
 	'hierarchical' => false,
 	'taxonomies'   => array('cat', 'tag')
 );*/
@@ -41,10 +47,12 @@ $cpts = array();
 
 // Portfolio
 /*$cpts[] = array(
-	'post_type'    => 'portfolio',
-	'name'         => 'Portfolio',
-	'plural'       => 'Portfolio cases',
-	'singular'     => 'Portfolio case',
+	'post_type'     => 'portfolio',
+	'labels'       => array(
+		'name'         => 'Portfolio',
+		'plural'       => 'Portfolio cases',
+		'singular'     => 'Portfolio case'
+	),
 	'hierarchical' => false,
 	'taxonomies'   => array(
 		'cat',
@@ -61,10 +69,12 @@ $cpts = array();
 
 // Clients
 /*$cpts[] = array(
-	'post_type'    => 'clients',
-	'name'         => 'Cliënten',
-	'plural'       => 'Cliënten',
-	'singular'     => 'Cliënt',
+	'post_type'     => 'clients',
+	'labels'       => array(
+		'name'         => 'Cliënten',
+		'plural'       => 'Cliënten',
+		'singular'     => 'Cliënt'
+	),
 	'hierarchical' => false,
 	'taxonomies'   => array('cat', 'tag')
 );*/
@@ -72,10 +82,12 @@ $cpts = array();
 
 // Products
 /*$cpts[] = array(
-	'post_type'    => 'products',
-	'name'         => 'Producten',
-	'plural'       => 'Producten',
-	'singular'     => 'Product',
+	'post_type'     => 'products',
+	'labels'       => array(
+		'name'         => 'Producten',
+		'plural'       => 'Producten',
+		'singular'     => 'Product'
+	),
 	'hierarchical' => false,
 	'taxonomies'   => array('cat', 'tag')
 );*/

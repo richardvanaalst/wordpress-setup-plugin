@@ -37,7 +37,7 @@ class RiesmaSetup {
 	function __construct() {
 
 		// Add custom post types and taxonomy
-		$this->add_post_types();
+		self::add_post_types();
 
 		// Flush rewrite rules, so added post type permalinks work
 		add_action( 'init', array( $this, 'flush_rewrite_rules' ) );

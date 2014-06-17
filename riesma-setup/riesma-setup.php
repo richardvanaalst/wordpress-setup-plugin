@@ -3,7 +3,7 @@
 Plugin Name:   Riesma Setup
 Plugin URI:    http://riesma.nl/
 Description:   Adding custom post types, sorting and hiding admin menu items.
-Version:       1.1.0
+Version:       1.1.1
 Author:        Richard van Aalst
 Author URI:    http://riesma.nl/
 
@@ -25,12 +25,10 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 if( ! defined( 'ABSPATH' ) ) exit;
 
 
-require_once( 'includes/class.setup.php' );
-require_once( 'includes/class.posttype.php' );
+// Initialise the setup
+require_once( 'includes/class.main.php' );
 
-
-// Instantiate the setup
-$RiesmaSetup = new RiesmaSetup();
+Riesma::init();
 
 
 ?>
