@@ -56,10 +56,15 @@ class RiesmaPostType {
 		// Add the post type, if it does not exist yet
 		if( !post_type_exists( $this->the_post_type ) ) {
 			add_action( 'init', array( $this, 'register_post_type' ) );
+			add_action( 'init', array( $this, 'register_taxonomy' ) );
 		}
 	}
 
 
+	/**
+	 * Register post type
+	 *
+	 */
 	public function register_post_type() {
 
 		// Post type arguments
@@ -138,11 +143,15 @@ class RiesmaPostType {
 
 		// Register the post type
 		register_post_type( $this->the_post_type, $args );
+	}
 
 
-		/**
-		 * Add custom taxonomy
-		 */
+	/**
+	 * Register taxonomy
+	 *
+	 */
+	public function register_taxonomy() {
+
 		if ( !empty( $this->taxonomies ) && is_array( $this->taxonomies ) ) {
 
 			foreach ( $this->taxonomies as $taxonomy ) {
