@@ -54,7 +54,7 @@ class RiesmaPostType {
 
 
 		// Add the post type, if it does not exist yet
-		if( !post_type_exists( $this->the_post_type ) ) {
+		if ( !post_type_exists( $this->the_post_type ) ) {
 			add_action( 'init', array( $this, 'register_post_type' ) );
 			add_action( 'init', array( $this, 'register_taxonomy' ) );
 		}
@@ -152,53 +152,58 @@ class RiesmaPostType {
 	 */
 	public function register_taxonomy() {
 
-		if ( !empty( $this->taxonomies ) && is_array( $this->taxonomies ) ) {
-
+		if ( !empty( $this->taxonomies ) ) {
 			foreach ( $this->taxonomies as $taxonomy ) {
 
-				// Categories (predefined): WordPress provides labels and translation
-				if ( $taxonomy == 'cat' ) {
+				// Predefined taxonomy
+				if ( !is_array( $taxonomy ) ) {
 
-					register_taxonomy( $this->the_post_type . '_category',
-						array( $this->the_post_type ),
-						array(
-							'hierarchical'   => true,
-							'rewrite'        => array(
-							    'slug'       => $this->slug . '-' . Riesma::slugify( __( 'Categories' ) ),
-							    'with_front' => true
-							)
-						)
-					);
+					switch ( $taxonomy ) {
+
+						// Categories (predefined): WordPress provides translation
+						case 'cat':
+
+							register_taxonomy( $this->the_post_type . '_category',
+								array( $this->the_post_type ),
+								array(
+									'hierarchical'   => true,
+									'rewrite'        => array(
+									    'slug'       => $this->slug . '-' . Riesma::slugify( __( 'Categories' ) ),
+									    'with_front' => true
+									)
+								)
+							);
+							break;
+
+
+						// Tags (predefined): WordPress provides translation
+						case 'tag':
+
+							register_taxonomy( $this->the_post_type . '_tag',
+								array( $this->the_post_type ),
+								array(
+									'hierarchical'   => false,
+									'rewrite'        => array(
+									    'slug'       => $this->slug . '-' . Riesma::slugify( __( 'Tags' ) ),
+									    'with_front' => true
+									)
+								)
+							);
+							break;
+
+
+						// WordPress default post categories
+						case 'WP_cat':
+							register_taxonomy_for_object_type( 'category', $this->the_post_type );
+							break;
+
+
+						// WordPress default post tags
+						case 'WP_tag':
+							register_taxonomy_for_object_type( 'post_tag', $this->the_post_type );
+							break;
+					}
 				}
-
-
-				// Tags (predefined): WordPress provides labels and translation
-				else if ($taxonomy == 'tag' ) {
-
-					register_taxonomy( $this->the_post_type . '_tag',
-						array( $this->the_post_type ),
-						array(
-							'hierarchical'   => false,
-							'rewrite'        => array(
-							    'slug'       => $this->slug . '-' . Riesma::slugify( __( 'Tags' ) ),
-							    'with_front' => true
-							)
-						)
-					);
-				}
-
-
-				// WordPress default post categories
-				else if ($taxonomy == 'WP_cat' ) {
-					register_taxonomy_for_object_type( 'category', $this->the_post_type );
-				}
-
-
-				// WordPress default post tags
-				else if ($taxonomy == 'WP_tag' ) {
-					register_taxonomy_for_object_type( 'post_tag', $this->the_post_type );
-				}
-
 
 				// Custom taxonomy
 				else if ( is_array( $taxonomy ) ) {
@@ -259,6 +264,7 @@ class RiesmaPostType {
 						)
 					);
 				}
+
 			} // end foreach taxonomy
 		}
 	}
