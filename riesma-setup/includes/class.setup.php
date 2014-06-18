@@ -65,12 +65,6 @@ class RiesmaSetup {
 				// $$cpt['post_type'] = new RiesmaPostType( $cpt );
 				$rcpt = new RiesmaPostType( $cpt );
 			}
-
-			/* function not yet available on plugins_loaded: solution?
-			// Flush permalink rewrite rules when developing
-			if ( WP_DEBUG ) {
-				flush_rewrite_rules(false);
-			}*/
 		}
 	}
 
