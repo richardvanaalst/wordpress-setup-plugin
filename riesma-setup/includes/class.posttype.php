@@ -33,24 +33,24 @@ class RiesmaPostType {
 	 */
 	function __construct( $cpt ) {
 
-		$this->the_post_type      = $cpt['post_type'];
-		$this->labels         = $cpt['labels'];
+		$this->the_post_type = $cpt['post_type'];
+		$this->labels        = $cpt['labels'];
 
-		if ( is_array($this->labels) ) {
-			$this->name       = Riesma::titelify($this->labels['name']);
-			$this->plural     = Riesma::titelify($this->labels['plural']);
-			$this->singular   = Riesma::titelify($this->labels['singular']);
+		if ( is_array( $this->labels ) ) {
+			$this->name     = Riesma::titelify( $this->labels['name'] );
+			$this->plural   = Riesma::titelify( $this->labels['plural'] );
+			$this->singular = Riesma::titelify( $this->labels['singular'] );
 		}
 		else {
-			$this->name       = Riesma::titelify($this->labels);
-			$this->plural     = Riesma::titelify($this->labels);
-			$this->singular   = Riesma::titelify($this->labels);
+			$this->name     = Riesma::titelify( $this->labels );
+			$this->plural   = Riesma::titelify( $this->labels );
+			$this->singular = Riesma::titelify( $this->labels );
 		}
 
-		$this->hierarchical   = !empty( $cpt['hierarchical'] ) ? $cpt['hierarchical'] : false;
-		$this->taxonomies     = !empty( $cpt['taxonomies'] ) ? $cpt['taxonomies'] : false;
-		$this->slug           = Riesma::slugify( $this->name );
-		$this->icon           = Riesma::iconify( $this->the_post_type );
+		$this->hierarchical = !empty( $cpt['hierarchical'] ) ? $cpt['hierarchical'] : false;
+		$this->taxonomies   = !empty( $cpt['taxonomies'] ) ? $cpt['taxonomies'] : false;
+		$this->slug         = Riesma::slugify( $this->name );
+		$this->icon         = Riesma::iconify( $this->the_post_type );
 
 
 		// Add the post type, if it does not exist yet
@@ -75,7 +75,7 @@ class RiesmaPostType {
 				// Name in admin bar dropdown (default: singular_name | name)
 				// 'name_admin_bar'     => _x( $this->name, 'add new on admin bar' ),
 				// All Items menu item (default: name)
-				'all_items'          => __( 'Alle ' . Riesma::textify($this->plural) ),
+				'all_items'          => __( 'Alle ' . Riesma::textify( $this->plural ) ),
 				// Add New menu item
 				'add_new'            => __( $this->singular . ' toevoegen' ),
 				// Add New display title
@@ -89,9 +89,9 @@ class RiesmaPostType {
 				// Search post type title
 				'search_items'       => __( $this->plural . ' zoeken' ),
 				// No Entries Yet dialog
-				'not_found'          => __( 'Geen ' . Riesma::textify($this->plural) . ' gevonden' ),
+				'not_found'          => __( 'Geen ' . Riesma::textify( $this->plural ) . ' gevonden' ),
 				// Nothing in the Trash dialog
-				'not_found_in_trash' => __( 'Geen ' . Riesma::textify($this->plural) . ' gevonden in de prullenbak' ),
+				'not_found_in_trash' => __( 'Geen ' . Riesma::textify( $this->plural ) . ' gevonden in de prullenbak' ),
 				// Parent text, hierarchical types (pages) only
 				'parent_item_colon'  => ''
 			),
@@ -192,7 +192,7 @@ class RiesmaPostType {
 
 
 				// Custom taxonomy
-				else if ( is_array($this->taxonomy) ) {
+				else if ( is_array( $this->taxonomy ) ) {
 
 					$the_taxonomy     = $this->the_post_type . '_' . $this->taxonomy['taxonomy'];
 					$tax_name         = $this->the_post_type . '_' . $this->taxonomy['name'];
@@ -215,7 +215,7 @@ class RiesmaPostType {
 								// Name of individual taxonomy item
 								'singular_name'     => __( $tax_singular ),
 								// Add New taxonomy title and button
-								'add_new_item'      => __( 'Nieuwe ' . Riesma::textify($tax_singular) . ' toevoegen' ),
+								'add_new_item'      => __( $tax_singular . ' toevoegen' ),
 								// Edit taxonomy page title
 								'edit_item'         => __( $tax_singular . ' bewerken' ),
 								// Update taxonomy button in Quick Edit
@@ -223,9 +223,9 @@ class RiesmaPostType {
 								// Search taxonomy button
 								'search_items'      => __( $tax_plural . ' zoeken' ),
 								// All taxonomy title in taxonomy's panel tab
-								'all_items'         => __( 'Alle ' . Riesma::textify($tax_plural) ),
+								'all_items'         => __( 'Alle ' . Riesma::textify( $tax_plural ) ),
 								// New taxonomy title in taxonomy's panel tab
-								'new_item_name'     => __( 'Nieuwe ' . Riesma::textify($tax_singular) . ' naam' ),
+								'new_item_name'     => __( 'Nieuwe ' . Riesma::textify( $tax_singular ) . ' naam' ),
 								// taxonomy Parent in taxonomy's panel select box
 								'parent_item'       => __( $tax_singular . ' hoofd' ),
 								// taxonomy Parent title with colon
