@@ -15,7 +15,7 @@ if ( !class_exists( 'RiesmaPostType' ) ) :
 class RiesmaPostType {
 
 
-	var $post_type;
+	var $the_post_type;
 	var $labels;
 	var $name;
 	var $plural;
@@ -33,7 +33,7 @@ class RiesmaPostType {
 	 */
 	function __construct( $cpt ) {
 
-		$this->post_type      = $cpt['post_type'];
+		$this->the_post_type      = $cpt['post_type'];
 		$this->labels         = $cpt['labels'];
 
 		if ( is_array($this->labels) ) {
@@ -50,11 +50,11 @@ class RiesmaPostType {
 		$this->hierarchical   = !empty( $cpt['hierarchical'] ) ? $cpt['hierarchical'] : false;
 		$this->taxonomies     = !empty( $cpt['taxonomies'] ) ? $cpt['taxonomies'] : false;
 		$this->slug           = Riesma::slugify( $this->name );
-		$this->icon           = Riesma::iconify( $this->post_type );
+		$this->icon           = Riesma::iconify( $this->the_post_type );
 
 
 		// Add the post type, if it does not exist yet
-		if( !post_type_exists( $this->post_type ) ) {
+		if( !post_type_exists( $this->the_post_type ) ) {
 			add_action( 'init', array( $this, 'register_post_type' ) );
 		}
 	}
@@ -137,7 +137,7 @@ class RiesmaPostType {
 		);
 
 		// Register the post type
-		register_post_type( $this->post_type, $args );
+		register_post_type( $this->the_post_type, $args );
 
 
 		/**
@@ -147,11 +147,11 @@ class RiesmaPostType {
 
 			foreach ( $this->taxonomies as $this->taxonomy ) {
 
-				// Categories (predefined): WordPress provides translation
+				// Categories (predefined): WordPress provides labels and translation
 				if ( $this->taxonomy == 'cat' ) {
 
-					register_taxonomy( $this->post_type . '_category',
-						array( $this->post_type ),
+					register_taxonomy( $this->the_post_type . '_category',
+						array( $this->the_post_type ),
 						array(
 							'hierarchical'   => true,
 							'rewrite'        => array(
@@ -163,11 +163,11 @@ class RiesmaPostType {
 				}
 
 
-				// Tags (predefined): WordPress provides translation
+				// Tags (predefined): WordPress provides labels and translation
 				else if ($this->taxonomy == 'tag' ) {
 
-					register_taxonomy( $this->post_type . '_tag',
-						array( $this->post_type ),
+					register_taxonomy( $this->the_post_type . '_tag',
+						array( $this->the_post_type ),
 						array(
 							'hierarchical'   => false,
 							'rewrite'        => array(
@@ -181,31 +181,31 @@ class RiesmaPostType {
 
 				// WordPress default post categories
 				else if ($this->taxonomy == 'WP_cat' ) {
-					register_taxonomy_for_object_type( 'category', $this->post_type );
+					register_taxonomy_for_object_type( 'category', $this->the_post_type );
 				}
 
 
 				// WordPress default post tags
 				else if ($this->taxonomy == 'WP_tag' ) {
-					register_taxonomy_for_object_type( 'post_tag', $this->post_type );
+					register_taxonomy_for_object_type( 'post_tag', $this->the_post_type );
 				}
 
 
 				// Custom taxonomy
 				else if ( is_array($this->taxonomy) ) {
 
-					$the_tax          = $this->post_type . '_' . $this->taxonomy['taxonomy'];
-					$tax_name         = $this->post_type . '_' . $this->taxonomy['name'];
+					$the_taxonomy     = $this->the_post_type . '_' . $this->taxonomy['taxonomy'];
+					$tax_name         = $this->the_post_type . '_' . $this->taxonomy['name'];
 					$tax_plural       = $this->taxonomy['plural'];
 					$tax_singular     = $this->taxonomy['singular'];
 					$tax_hierarchical = !empty( $this->taxonomy['hierarchical'] ) ? $this->taxonomy['hierarchical'] : true;
 					$tax_slug         = $this->slug . '-' . Riesma::slugify( $tax_name );
 
 
-					register_taxonomy( $the_tax,
+					register_taxonomy( $the_taxonomy,
 
 						// Name of register_post_type
-						array( $this->post_type ),
+						array( $this->the_post_type ),
 
 						array(
 
