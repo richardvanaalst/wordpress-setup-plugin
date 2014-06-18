@@ -145,10 +145,10 @@ class RiesmaPostType {
 		 */
 		if ( !empty( $this->taxonomies ) && is_array( $this->taxonomies ) ) {
 
-			foreach ( $this->taxonomies as $this->taxonomy ) {
+			foreach ( $this->taxonomies as $taxonomy ) {
 
 				// Categories (predefined): WordPress provides labels and translation
-				if ( $this->taxonomy == 'cat' ) {
+				if ( $taxonomy == 'cat' ) {
 
 					register_taxonomy( $this->the_post_type . '_category',
 						array( $this->the_post_type ),
@@ -164,7 +164,7 @@ class RiesmaPostType {
 
 
 				// Tags (predefined): WordPress provides labels and translation
-				else if ($this->taxonomy == 'tag' ) {
+				else if ($taxonomy == 'tag' ) {
 
 					register_taxonomy( $this->the_post_type . '_tag',
 						array( $this->the_post_type ),
@@ -180,25 +180,25 @@ class RiesmaPostType {
 
 
 				// WordPress default post categories
-				else if ($this->taxonomy == 'WP_cat' ) {
+				else if ($taxonomy == 'WP_cat' ) {
 					register_taxonomy_for_object_type( 'category', $this->the_post_type );
 				}
 
 
 				// WordPress default post tags
-				else if ($this->taxonomy == 'WP_tag' ) {
+				else if ($taxonomy == 'WP_tag' ) {
 					register_taxonomy_for_object_type( 'post_tag', $this->the_post_type );
 				}
 
 
 				// Custom taxonomy
-				else if ( is_array( $this->taxonomy ) ) {
+				else if ( is_array( $taxonomy ) ) {
 
-					$the_taxonomy     = $this->the_post_type . '_' . $this->taxonomy['taxonomy'];
-					$tax_name         = $this->the_post_type . '_' . $this->taxonomy['name'];
-					$tax_plural       = $this->taxonomy['plural'];
-					$tax_singular     = $this->taxonomy['singular'];
-					$tax_hierarchical = !empty( $this->taxonomy['hierarchical'] ) ? $this->taxonomy['hierarchical'] : true;
+					$the_taxonomy     = $this->the_post_type . '_' . $taxonomy['taxonomy'];
+					$tax_name         = $this->the_post_type . '_' . $taxonomy['name'];
+					$tax_plural       = $taxonomy['plural'];
+					$tax_singular     = $taxonomy['singular'];
+					$tax_hierarchical = !empty( $taxonomy['hierarchical'] ) ? $taxonomy['hierarchical'] : true;
 					$tax_slug         = $this->slug . '-' . Riesma::slugify( $tax_name );
 
 
