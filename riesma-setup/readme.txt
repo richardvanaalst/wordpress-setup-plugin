@@ -6,7 +6,7 @@ License URI: http://www.gnu.org/licenses/gpl.html
 Tags: functions
 Requires at least: 3.x
 Tested up to: 3.9.1
-Stable tag: 1.1.0
+Stable tag: 1.1.2
 
 Adding some basic functions and settings to WordPress.
 

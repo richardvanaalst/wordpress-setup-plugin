@@ -1,24 +1,7 @@
 WordPress Setup Plugin
 ========================
 
-Adding some basic functions and settings to WordPress.
-
-
-# Riesma Setup
-
-- Auhor: Richard van Aalst
-- Author URI: http://riesma.nl/
-- License: GPLv3 or later
-- License URI: http://www.gnu.org/licenses/gpl.html
-- Tags:
-- Requires at least: 3.x
-- Tested up to: 3.9.1
-- Stable tag: 1.1.1
-
-
-## Description
-
-Add and edit this plugin's functions for creating custom post types and taxonomies, cleanup and sort admin menu items.
+Adding some basic functions and settings to WordPress for creating custom post types and taxonomies, clean up and sort admin menu items.
 
 
 ## Installation
