@@ -34,7 +34,7 @@ $cpts = array();
 
 // Items
 /*$cpts[] = array(
-	'post_type'     => 'items',
+	'post_type'    => 'items',
 	'labels'       => array(
 		'name'         => 'Items',
 		'plural'       => 'Items',
@@ -47,7 +47,7 @@ $cpts = array();
 
 // Portfolio
 /*$cpts[] = array(
-	'post_type'     => 'portfolio',
+	'post_type'    => 'portfolio',
 	'labels'       => array(
 		'name'         => 'Portfolio',
 		'plural'       => 'Portfolio cases',
@@ -69,7 +69,7 @@ $cpts = array();
 
 // Clients
 /*$cpts[] = array(
-	'post_type'     => 'clients',
+	'post_type'    => 'clients',
 	'labels'       => array(
 		'name'         => 'Cliënten',
 		'plural'       => 'Cliënten',
@@ -82,7 +82,7 @@ $cpts = array();
 
 // Products
 /*$cpts[] = array(
-	'post_type'     => 'products',
+	'post_type'    => 'products',
 	'labels'       => array(
 		'name'         => 'Producten',
 		'plural'       => 'Producten',
