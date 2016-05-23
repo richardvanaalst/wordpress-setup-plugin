@@ -26,71 +26,64 @@
  * WP_tag   WordPress default tags
  */
 
-if( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 
 $cpts = array();
 
 
-// Items
-/*$cpts[] = array(
-	'post_type'    => 'items',
-	'labels'       => array(
-		'name'         => 'Items',
-		'plural'       => 'Items',
-		'singular'     => 'Item'
-	),
-	'hierarchical' => false,
-	'taxonomies'   => array('cat', 'tag')
-);*/
-
-
-// Portfolio
-/*$cpts[] = array(
-	'post_type'    => 'portfolio',
-	'labels'       => array(
-		'name'         => 'Portfolio',
-		'plural'       => 'Portfolio cases',
-		'singular'     => 'Portfolio case'
-	),
-	'hierarchical' => false,
-	'taxonomies'   => array(
-		'cat',
-		'tag',
-		array(
-			'taxonomy' => 'collections',
-			'name'     => 'Collecties',
-			'plural'   => 'Collecties',
-			'singular' => 'Collectie'
-		)
-	)
-);*/
-
-
-// Clients
-/*$cpts[] = array(
-	'post_type'    => 'clients',
-	'labels'       => array(
-		'name'         => 'Cliënten',
-		'plural'       => 'Cliënten',
-		'singular'     => 'Cliënt'
-	),
-	'hierarchical' => false,
-	'taxonomies'   => array('cat', 'tag')
-);*/
-
-
 // Products
-/*$cpts[] = array(
+$cpts[] = array(
 	'post_type'    => 'products',
 	'labels'       => array(
-		'name'         => 'Producten',
-		'plural'       => 'Producten',
+		'name'         => 'Products',
+		'plural'       => 'Products',
 		'singular'     => 'Product'
 	),
-	'hierarchical' => false,
-	'taxonomies'   => array('cat', 'tag')
-);*/
+	'taxonomies'   => array(
+		array(
+			'taxonomy' => 'collections',
+			'name'     => 'Collections',
+			'plural'   => 'Collections',
+			'singular' => 'Collection'
+		)
+	),
+	'supports'     => array(
+		'title',
+		// 'editor',
+		'author',
+		'thumbnail',
+		'custom-fields',
+		'revisions'
+	)
+
+);
+
+
+// Stores
+$cpts[] = array(
+	'post_type'       => 'stores',
+	'labels'          => array(
+		'name'            => 'Stores',
+		'plural'          => 'Stores',
+		'singular'        => 'Store'
+	),
+	'taxonomies'      => array(
+		array(
+			'taxonomy'    => 'types',
+			'name'        => 'Store types',
+			'plural'      => 'Store types',
+			'singular'    => 'Store type'
+		)
+	),
+	'supports'        => array(
+		'title',
+		'editor',
+		'author',
+		'custom-fields',
+		'revisions'
+	)
+);
 
 
 ?>

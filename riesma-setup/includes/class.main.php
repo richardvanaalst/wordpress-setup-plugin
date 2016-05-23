@@ -32,8 +32,8 @@ class Riesma {
 	 * @param    string   $string
 	 * @return   string
 	 */
-	public static function titelify( $string ) {
-		return apply_filters( 'riesma_titelify', ucfirst( strtolower( $string ) ) );
+	public static function titleify( $string ) {
+		return apply_filters( 'riesma_titleify', ucfirst( strtolower( $string ) ) );
 	}
 
 
@@ -49,14 +49,35 @@ class Riesma {
 
 
 	/**
+	 * Simple make plural
+	 *
+	 * @param    string   $string
+	 * @return   string
+	 */
+	public static function pluralify( $string ) {
+		return apply_filters( 'riesma_pluralify', $string . 's' );
+	}
+
+
+	/**
+	 * Simple make singular    --   Todo: pop s
+	 *
+	 * @param    string   $string
+	 * @return   string
+	 */
+	// public static function singularify( $string ) {
+		// return apply_filters( 'riesma_singularify', $string );
+	// }
+
+
+	/**
 	 * Create clean slug
-	 * !! Improve this: __() returns &235; instead of ë
 	 *
 	 * @param    string   $string
 	 * @return   string
 	 */
 	public static function slugify( $string ) {
-		return apply_filters( 'riesma_slugify', str_replace( array(' ', '"'), array('-', ''), iconv( 'UTF-8', 'ASCII//TRANSLIT//IGNORE', strtolower( $string ) ) ) );
+		return apply_filters( 'riesma_slugify', sanitize_title( $string ) );
 	}
 
 

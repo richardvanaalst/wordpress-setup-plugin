@@ -22,8 +22,23 @@ class RiesmaPostType {
 	var $singular;
 	var $hierarchical;
 	var $taxonomies;
+	var $supports;
 	var $slug;
 	var $icon;
+
+	var $supports_default = array(
+	    'title',
+	    'editor',
+	    'author',
+	    'thumbnail',
+	    'excerpt',
+	    // 'trackbacks',
+	    'custom-fields',
+	    // 'comments',
+	    'revisions',
+	    'page-attributes',
+	    // 'post-formats'
+	);
 
 
 	/**
@@ -33,28 +48,65 @@ class RiesmaPostType {
 	 */
 	function __construct( $cpt ) {
 
-		$this->the_post_type = $cpt['post_type'];
+		$this->the_post_type = Riesma::slugify( $cpt['post_type'] );
 		$this->labels        = $cpt['labels'];
 
-		if ( is_array( $this->labels ) ) {
-			$this->name     = Riesma::titelify( $this->labels['name'] );
-			$this->plural   = Riesma::titelify( $this->labels['plural'] );
-			$this->singular = Riesma::titelify( $this->labels['singular'] );
+		// Setup all labels
+		/*
+		$lang = get_language_function_still_to_write();
+		// Dutch
+		if ( $lang == 'nl' ) {
+
+			if ( is_array( $this->labels ) ) {
+				$this->name     = Riesma::titleify( $this->labels['name'] );
+				$this->plural   = Riesma::titleify( $this->labels['plural'] );
+				$this->singular = Riesma::titleify( $this->labels['singular'] );
+			}
+			else {
+				$this->name     = Riesma::titleify( $this->labels . 's' );
+				$this->plural   = Riesma::titleify( $this->labels . 's' );
+				$this->singular = Riesma::titleify( $this->labels );
+			}
+
+			$this->hierarchical = !empty( $cpt['hierarchical'] ) ? $cpt['hierarchical'] : false;
+			$this->taxonomies   = !empty( $cpt['taxonomies'] ) ? $cpt['taxonomies'] : false;
+			$this->supports     = !empty( $cpt['supports'] ) ? $cpt['supports'] : $this->supports_default;
+			$this->slug         = Riesma::slugify( $this->name );
+			$this->icon         = Riesma::iconify( $this->the_post_type );
 		}
+
+		// English
 		else {
-			$this->name     = Riesma::titelify( $this->labels );
-			$this->plural   = Riesma::titelify( $this->labels );
-			$this->singular = Riesma::titelify( $this->labels );
+
+			if ( is_array( $this->labels ) ) {
+				$this->name          = Riesma::titleify( $this->labels['name'] );
+				$this->singular_name = Riesma::titleify( $this->labels['singular'] );
+				$this->plural        = Riesma::textify( $this->labels['plural'] );
+				$this->singular      = Riesma::textify( $this->labels['singular'] );
+			}
+			else {
+				$this->name          = Riesma::titleify( Riesma::pluralify( $this->labels ) );
+				$this->singular_name = Riesma::titleify( $this->labels );
+				$this->plural        = Riesma::textify( Riesma::pluralify( $this->labels ) );
+				$this->singular      = Riesma::textify( $this->labels );
+			}
 		}
+		*/
+
+		$this->name          = Riesma::titleify( $this->labels['name'] );
+		$this->singular_name = Riesma::titleify( $this->labels['singular'] );
+		$this->plural        = Riesma::textify( $this->labels['plural'] );
+		$this->singular      = Riesma::textify( $this->labels['singular'] );
 
 		$this->hierarchical = !empty( $cpt['hierarchical'] ) ? $cpt['hierarchical'] : false;
 		$this->taxonomies   = !empty( $cpt['taxonomies'] ) ? $cpt['taxonomies'] : false;
+		$this->supports     = !empty( $cpt['supports'] ) ? $cpt['supports'] : $this->supports_default;
 		$this->slug         = Riesma::slugify( $this->name );
 		$this->icon         = Riesma::iconify( $this->the_post_type );
 
 
 		// Add the post type, if it does not exist yet
-		if ( !post_type_exists( $this->the_post_type ) ) {
+		if ( ! post_type_exists( $this->the_post_type ) ) {
 			add_action( 'init', array( $this, 'register_post_type' ) );
 			add_action( 'init', array( $this, 'register_taxonomy' ) );
 		}
@@ -72,42 +124,74 @@ class RiesmaPostType {
 
 			'labels' => array(
 				// Name of the post type group
-				'name'               => _x( $this->name, 'post type general name' ),
+				'name'               => sprintf( _x( '%s', 'post type general name' ), $this->name ),
 				// Name of individual post type item (default: name)
-				'singular_name'      => _x( $this->singular, 'post type singular name' ),
+				'singular_name'      => sprintf( _x( '%s', 'post type singular name' ), $this->singular_name ),
 				// Name of menu item (default: name)
-				// 'menu_name'          => _x( $this->name, 'admin menu' ),
+				// 'menu_name'          => sprintf( _x( '%s', 'admin menu' ), $this->name ),
 				// Name in admin bar dropdown (default: singular_name | name)
-				// 'name_admin_bar'     => _x( $this->name, 'add new on admin bar' ),
+				// 'name_admin_bar'     => sprintf( _x( '%s', 'add new on admin bar' ), $this->name ),
 				// All Items menu item (default: name)
-				'all_items'          => __( 'Alle ' . Riesma::textify( $this->plural ) ),
+				'all_items'          => sprintf( __( 'All %s' ), $this->plural ),
 				// Add New menu item
-				'add_new'            => __( $this->singular . ' toevoegen' ),
-				// Add New display title
-				'add_new_item'       => __( $this->singular . '  toevoegen' ),
-				// Edit display title
-				'edit_item'          => __( $this->singular . ' bewerken' ),
+				'add_new'            => sprintf( _x( 'Add New',' %s' ), $this->singular ),
+				// Add New page title
+				'add_new_item'       => sprintf( __( 'Add New %s' ), $this->singular ),
+				// Edit text
+				'edit_item'          => sprintf( __( 'Edit %s' ), $this->singular ),
 				// New display title
-				'new_item'           => __( $this->singular . ' toevoegen' ),
+// where?				'new_item'           => sprintf( __( 'New %s' ), $this->singular ),
+				// View button besides permalink
+				'view_item'          => sprintf( __( 'View %s' ), $this->singular ),
+				// Search button
+				'search_items'       => sprintf( __( 'Search %s' ), $this->plural ),
+				// No entries/search results dialog
+				'not_found'          => sprintf( __( 'No %s found.' ), $this->plural ),
+				// Nothing in the Trash dialog
+				'not_found_in_trash' => sprintf( __( 'No %s found in Trash.' ), $this->plural ),
+				// Parent text, hierarchical types (pages) only
+// where?				'parent_item_colon'  => sprintf( __( '%s Parent' ), $this->singular )
+			),
+
+			/* Dutch
+			'labels' => array(
+				// Name of the post type group
+				'name'               => sprintf( _x( '%s', 'post type general name' ), $this->name ),
+				// Name of individual post type item (default: name)
+				'singular_name'      => sprintf( _x( '%s', 'post type singular name' ), $this->singular_name ),
+				// Name of menu item (default: name)
+				// 'menu_name'          => sprintf( _x( '%s', 'admin menu' ), $this->name ),
+				// Name in admin bar dropdown (default: singular_name | name)
+				// 'name_admin_bar'     => sprintf( _x( '%s', 'add new on admin bar' ), $this->name ),
+				// All Items menu item (default: name)
+				'all_items'          => sprintf( __( 'Alle ', Riesma::textify( $this->plural ) ),
+				// Add New menu item
+				'add_new'            => sprintf( __( $this->singular ), ' toevoegen' ),
+				// Add New display title
+				'add_new_item'       => sprintf( __( $this->singular ), '  toevoegen' ),
+				// Edit display title
+				'edit_item'          => sprintf( __( $this->singular ), ' bewerken' ),
+				// New display title
+				'new_item'           => sprintf( __( $this->singular ), ' toevoegen' ),
 				// View display title
-				'view_item'          => __( $this->singular . ' bekijken' ),
+				'view_item'          => sprintf( __( $this->singular ), ' bekijken' ),
 				// Search post type title
-				'search_items'       => __( $this->plural . ' zoeken' ),
+				'search_items'       => sprintf( __( $this->plural ), ' zoeken' ),
 				// No Entries Yet dialog
-				'not_found'          => __( 'Geen ' . Riesma::textify( $this->plural ) . ' gevonden' ),
+				'not_found'          => sprintf( __( 'Geen ', Riesma::textify( $this->plural ) ), ' gevonden' ),
 				// Nothing in the Trash dialog
 				'not_found_in_trash' => __( 'Geen ' . Riesma::textify( $this->plural ) . ' gevonden in de prullenbak' ),
 				// Parent text, hierarchical types (pages) only
 				'parent_item_colon'  => ''
-			),
+			),*/
 
 			// Custom post type description
-			'description'         => __( $this->name . ' post type.' ),
+			'description'         => sprintf( __( 'This is the %s post type.' ), $this->name ),
 
 			// Show in the admin panel
 			'public'              => true,
 			// Position in admin menu (integer, default: null, below Comments)
-			// Remember that custom_menu_order will override this
+			// Remember that custom_menu_order can override this
 			'menu_position'       => 5,
 			// Icon of menu item
 			'menu_icon'           => $this->icon,
@@ -115,29 +199,17 @@ class RiesmaPostType {
 			// String used for creating 'read', 'edit' and 'delete' links
 			'capability_type'     => 'post',
 
-			// Allow parent to be set (post vs page type)
+			// Allow parent to be set (false = post, true = page)
 			'hierarchical'        => $this->hierarchical,
 			// Enable options in the post editor
-			'supports'            => array(
-			    'title',
-			    'editor',
-			    'author',
-			    'thumbnail',
-			    'excerpt',
-			    'trackbacks',
-			    'custom-fields',
-			    'comments',
-			    'revisions',
-			    'page-attributes',
-			    'post-formats'
-			),
+			'supports'            => $this->supports,
 
 			// Rename the archive URL slug
 			'has_archive'         => $this->slug,
 			// Rename the URL slug
 			'rewrite'             => array(
-			    'slug'            => $this->slug,
-			    'with_front'      => true
+				'slug'            => $this->slug,
+				'with_front'      => true
 			)
 		);
 
@@ -168,8 +240,8 @@ class RiesmaPostType {
 								array(
 									'hierarchical'   => true,
 									'rewrite'        => array(
-									    'slug'       => $this->slug . '-' . Riesma::slugify( __( 'Categories' ) ),
-									    'with_front' => true
+										'slug'       => $this->slug . '-' . Riesma::slugify( __( 'Categories' ) ),
+										'with_front' => true
 									)
 								)
 							);
@@ -184,8 +256,8 @@ class RiesmaPostType {
 								array(
 									'hierarchical'   => false,
 									'rewrite'        => array(
-									    'slug'       => $this->slug . '-' . Riesma::slugify( __( 'Tags' ) ),
-									    'with_front' => true
+										'slug'       => $this->slug . '-' . Riesma::slugify( __( 'Tags' ) ),
+										'with_front' => true
 									)
 								)
 							);
@@ -229,21 +301,21 @@ class RiesmaPostType {
 								// Name of individual taxonomy item
 								'singular_name'     => __( $tax_singular ),
 								// Add New taxonomy title and button
-								'add_new_item'      => __( $tax_singular . ' toevoegen' ),
+//								'add_new_item'      => __( $tax_singular . ' toevoegen' ),
 								// Edit taxonomy page title
-								'edit_item'         => __( $tax_singular . ' bewerken' ),
+//								'edit_item'         => __( $tax_singular . ' bewerken' ),
 								// Update taxonomy button in Quick Edit
-								'update_item'       => __( $tax_singular . ' bijwerken' ),
+//								'update_item'       => __( $tax_singular . ' bijwerken' ),
 								// Search taxonomy button
-								'search_items'      => __( $tax_plural . ' zoeken' ),
+//								'search_items'      => __( $tax_plural . ' zoeken' ),
 								// All taxonomy title in taxonomy's panel tab
-								'all_items'         => __( 'Alle ' . Riesma::textify( $tax_plural ) ),
+//								'all_items'         => __( 'Alle ' . Riesma::textify( $tax_plural ) ),
 								// New taxonomy title in taxonomy's panel tab
-								'new_item_name'     => __( 'Nieuwe ' . Riesma::textify( $tax_singular ) . ' naam' ),
+//								'new_item_name'     => __( 'Nieuwe ' . Riesma::textify( $tax_singular ) . ' naam' ),
 								// taxonomy Parent in taxonomy's panel select box
-								'parent_item'       => __( $tax_singular . ' hoofd' ),
+//								'parent_item'       => __( $tax_singular . ' hoofd' ),
 								// taxonomy Parent title with colon
-								'parent_item_colon' => __( $tax_singular . ' hoofd:' ),
+//								'parent_item_colon' => __( $tax_singular . ' hoofd:' ),
 							),
 
 							// Hierachy: true = categories, false = tags
@@ -254,6 +326,8 @@ class RiesmaPostType {
 							'show_ui'           => true,
 							// Show in the menus admin panel
 							'show_in_nav_menus' => true,
+							// Show in the menus admin panel
+							'show_admin_column' => true,
 							// Allow vars to be used for querying taxonomy
 							'query_var'         => true,
 							// Rename the URL slug
